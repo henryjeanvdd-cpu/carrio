@@ -91,7 +91,5 @@ export async function POST(request) {
   }
 }
 
-// Disable body parsing — Stripe needs the raw body for signature verification
-export const config = {
-  api: { bodyParser: false },
-};
+// App Router automatically handles raw body for route handlers
+export const dynamic = 'force-dynamic';
