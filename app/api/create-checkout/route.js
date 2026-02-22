@@ -1,0 +1,100 @@
+import { stripe } from '@/lib/stripe';
+import { supabase } from '@/lib/supabase';
+import { NextResponse } from 'next/server';
+
+export async function POST(request) {
+  try {
+    const { email, plan } = await request.json();
+    // plan = 'single_brief' or 'pro'
+
+    if (!stripe) {
+      return NextResponse.json({ error: 'Stripe niet geconfigureerd' }, { status: 500 });
+    }
+
+    if (!email || !plan) {
+      return NextResponse.json({ error: 'Email en plan zijn vereist' }, { status: 400 });
+    }
+
+    const normalizedEmail = email.toLowerCase().trim();
+
+    // Get or create Stripe customer
+    let customerId = null;
+
+    if (supabase) {
+      const { data: user } = await supabase
+        .from('users')
+        .select('stripe_customer_id')
+        .eq('email', normalizedEmail)
+        .single();
+
+      customerId = user?.stripe_customer_id;
+    }
+
+    if (!customerId) {
+      const customer = await stripe.customers.create({ email: normalizedEmail });
+      customerId = customer.id;
+
+      // Save customer ID
+      if (supabase) {
+        await supabase
+          .from('users')
+          .update({ stripe_customer_id: customerId })
+          .eq('email', normalizedEmail);
+      }
+    }
+
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://carrio.be';
+
+    let sessionConfig;
+
+    if (plan === 'pro') {
+      // Monthly subscription
+      sessionConfig = {
+        customer: customerId,
+        mode: 'subscription',
+        line_items: [{
+          price_data: {
+            currency: 'eur',
+            product_data: {
+              name: 'Carrio Pro',
+              description: 'Onbeperkt motivatiebrieven, CV Builder, Interview Prep & LinkedIn Coach',
+            },
+            unit_amount: 1999, // €19.99 in cents
+            recurring: { interval: 'month' },
+          },
+          quantity: 1,
+        }],
+        success_url: `${baseUrl}/brief?payment=success&plan=pro`,
+        cancel_url: `${baseUrl}/brief?payment=cancelled`,
+        metadata: { email: normalizedEmail, plan: 'pro' },
+      };
+    } else {
+      // Single brief payment
+      sessionConfig = {
+        customer: customerId,
+        mode: 'payment',
+        line_items: [{
+          price_data: {
+            currency: 'eur',
+            product_data: {
+              name: 'Carrio Motivatiebrief',
+              description: 'Eén AI-gegenereerde motivatiebrief op maat',
+            },
+            unit_amount: 699, // €6.99 in cents
+          },
+          quantity: 1,
+        }],
+        success_url: `${baseUrl}/brief?payment=success&plan=single`,
+        cancel_url: `${baseUrl}/brief?payment=cancelled`,
+        metadata: { email: normalizedEmail, plan: 'single_brief' },
+      };
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionConfig);
+
+    return NextResponse.json({ url: session.url });
+  } catch (err) {
+    console.error('Checkout error:', err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}
