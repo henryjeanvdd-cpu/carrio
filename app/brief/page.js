@@ -409,7 +409,7 @@ export default function BriefApp() {
                         borderColor: 'rgba(99,102,241,0.15)',
                         color: '#94A3C0',
                       }}>
-                        💡 <strong className="text-[#D4DCE8]">Tip:</strong> Met <button onClick={() => setShowPaywall(true)} className="text-[#60A5FA] underline cursor-pointer bg-transparent border-none font-inherit" style={{fontSize: 'inherit'}}>Carrio Pro (€9,99/maand)</button> genereer je onbeperkt brieven en krijg je binnenkort ook de CV Builder en Interview Prep.
+                        💡 <strong className="text-[#D4DCE8]">Tip:</strong> Met <button onClick={() => setShowPaywall(true)} className="text-[#60A5FA] underline cursor-pointer bg-transparent border-none font-inherit" style={{fontSize: 'inherit'}}>Carrio Pro (€9,99/maand)</button> genereer je onbeperkt sollicitatiebrieven. Maandelijks opzegbaar.
                       </div>
                     )}
                   </div>
@@ -465,7 +465,7 @@ export default function BriefApp() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     <div style={{ fontSize: 15, fontWeight: 700, color: '#F0F2F7' }}>Carrio Pro</div>
-                    <div style={{ fontSize: 12, color: '#6B7A99', marginTop: 2 }}>Onbeperkt brieven + alle toekomstige tools</div>
+                    <div style={{ fontSize: 12, color: '#6B7A99', marginTop: 2 }}>Onbeperkt brieven, maandelijks opzegbaar</div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <div style={{ fontSize: 22, fontWeight: 800, color: '#F0F2F7' }}>€9,99</div>

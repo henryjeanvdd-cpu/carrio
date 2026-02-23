@@ -329,7 +329,7 @@ export default function LandingPage() {
                 <span style={{ fontSize: 14, color: '#6B7A99' }}>/maand</span>
               </div>
               <div style={{ fontSize: 13, color: '#6B7A99', marginBottom: 20 }}>onbeperkt brieven</div>
-              {['Onbeperkt sollicitatiebrieven', 'Alle talen', 'CV Builder (binnenkort)', 'Interview Prep (binnenkort)', 'Prioriteit support'].map((f, i) => (
+              {['Onbeperkt sollicitatiebrieven', 'Alle talen', 'Prioriteit support', 'Maandelijks opzegbaar'].map((f, i) => (
                 <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 10, fontSize: 13, color: '#D4DCE8' }}>
                   <span style={{ color: '#10B981' }}>✓</span>{f}
                 </div>

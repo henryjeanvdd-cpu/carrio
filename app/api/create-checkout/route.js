@@ -57,7 +57,7 @@ export async function POST(request) {
             currency: 'eur',
             product_data: {
               name: 'Carrio Pro',
-              description: 'Onbeperkt motivatiebrieven + alle toekomstige tools',
+              description: 'Onbeperkt sollicitatiebrieven, maandelijks opzegbaar',
             },
             unit_amount: 999, // €9.99 in cents
             recurring: { interval: 'month' },
