@@ -18,8 +18,8 @@ const Logo = () => (
 const features = [
   {
     emoji: '✍️',
-    title: 'Motivatiebrieven',
-    desc: 'AI schrijft overtuigende brieven die perfect passen bij Belgische conventies. Formele aanspreking, taalkennis-nadruk, en een sterke call-to-action.',
+    title: 'Sollicitatie- & Motivatiebrieven',
+    desc: 'AI schrijft overtuigende sollicitatiebrieven die perfect passen bij Belgische conventies. Formele aanspreking, taalkennis-nadruk, en een sterke call-to-action.',
     tag: 'NU BESCHIKBAAR',
     tagColor: '#10B981',
   },
@@ -54,10 +54,11 @@ const steps = [
 ];
 
 const faqs = [
-  { q: 'In welke talen werkt Carrio?', a: 'Carrio genereert motivatiebrieven in het Nederlands, Frans en Engels — de drie werktalen van België.' },
+  { q: 'In welke talen werkt Carrio?', a: 'Carrio genereert sollicitatiebrieven en motivatiebrieven in het Nederlands, Frans en Engels — de drie werktalen van België.' },
   { q: 'Is mijn data veilig?', a: 'Absoluut. We slaan geen persoonlijke gegevens op na het genereren van je brief. Je data wordt niet gedeeld met derden.' },
+  { q: 'Wat is het verschil tussen een sollicitatiebrief en motivatiebrief?', a: 'In Vlaanderen wordt vaak "sollicitatiebrief" gebruikt, terwijl "motivatiebrief" meer voorkomt in Wallonië en internationale contexten. Carrio genereert beide — de inhoud is hetzelfde: een overtuigende brief op maat van de vacature.' },
   { q: 'Wat maakt Carrio anders dan ChatGPT?', a: 'Carrio is specifiek gebouwd voor de Belgische arbeidsmarkt. We kennen de conventies: formele aanspreking, nadruk op taalkennis, VDAB/Actiris/Forem-compatibiliteit, en Belgische bedrijfscultuur.' },
-  { q: 'Moet ik betalen?', a: 'Je eerste brief is gratis, zodat je de kwaliteit kunt ervaren. Daarna kies je voor losse brieven (€6.99) of een Pro-abonnement (€19.99/maand) voor onbeperkte toegang tot alle tools.' },
+  { q: 'Moet ik betalen?', a: 'Je eerste sollicitatiebrief is gratis, zodat je de kwaliteit kunt ervaren. Daarna kies je voor het Starter-pakket (€4,99 voor 3 brieven) of een Pro-abonnement (€9,99/maand) voor onbeperkte toegang.' },
   { q: 'Werkt het ook voor Wallonië en Brussel?', a: 'Ja! Carrio werkt voor heel België. Genereer brieven in het Frans voor Wallonië, Nederlands voor Vlaanderen, of Engels/Frans voor Brussel.' },
 ];
 
@@ -129,7 +130,7 @@ export default function LandingPage() {
             fontSize: 'clamp(16px, 2vw, 19px)', color: '#94A3C0', maxWidth: 540,
             margin: '0 auto 32px', lineHeight: 1.7, opacity: 0,
           }}>
-            AI-powered motivatiebrieven, CV's en interviewvoorbereiding. Specifiek voor de Belgische arbeidsmarkt. In het Nederlands, Frans én Engels.
+            AI-powered sollicitatiebrieven, motivatiebrieven, CV's en interviewvoorbereiding. Specifiek voor de Belgische arbeidsmarkt. In het Nederlands, Frans én Engels.
           </p>
 
           <div className="animate-fade-up delay-300" style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', opacity: 0 }}>
@@ -138,7 +139,7 @@ export default function LandingPage() {
               background: 'linear-gradient(135deg, #3B82F6, #10B981)',
               color: '#FFF', textDecoration: 'none', display: 'inline-block',
               boxShadow: '0 4px 24px rgba(59,130,246,0.3)',
-            }}>Schrijf je eerste brief — gratis ✨</Link>
+            }}>Schrijf je eerste sollicitatiebrief — gratis ✨</Link>
             <a href="#hoe-werkt-het" style={{
               padding: '14px 28px', borderRadius: 10, fontSize: 15, fontWeight: 600,
               background: 'transparent', color: '#94A3C0', textDecoration: 'none',
@@ -277,7 +278,7 @@ export default function LandingPage() {
               <div style={{ fontSize: 12, fontWeight: 600, color: '#6B7A99', marginBottom: 4 }}>GRATIS</div>
               <div style={{ fontSize: 36, fontWeight: 800, color: '#F0F2F7' }}>€0</div>
               <div style={{ fontSize: 13, color: '#6B7A99', marginBottom: 20 }}>voor altijd</div>
-              {['1 motivatiebrief gratis', 'Nederlands, Frans & Engels', 'Kopieer met één klik'].map((f, i) => (
+              {['1 sollicitatiebrief gratis', 'Nederlands, Frans & Engels', 'Kopieer met één klik'].map((f, i) => (
                 <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 10, fontSize: 13, color: '#D4DCE8' }}>
                   <span style={{ color: '#10B981' }}>✓</span>{f}
                 </div>
@@ -287,6 +288,28 @@ export default function LandingPage() {
                 padding: '12px', borderRadius: 10, fontSize: 14, fontWeight: 600,
                 border: '1px solid #2A3550', color: '#94A3C0', textDecoration: 'none',
               }}>Start gratis</Link>
+            </div>
+
+            {/* Starter */}
+            <div style={{
+              background: '#141B2D', borderRadius: 16, padding: 28,
+              border: '1px solid rgba(42,53,80,0.4)',
+            }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: '#10B981', marginBottom: 4 }}>STARTER</div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+                <span style={{ fontSize: 36, fontWeight: 800, color: '#F0F2F7' }}>€4,99</span>
+              </div>
+              <div style={{ fontSize: 13, color: '#6B7A99', marginBottom: 20 }}>eenmalig — 3 brieven</div>
+              {['3 sollicitatiebrieven', 'Alle talen', 'Geen abonnement nodig', 'Ideaal voor sollicitanten'].map((f, i) => (
+                <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 10, fontSize: 13, color: '#D4DCE8' }}>
+                  <span style={{ color: '#10B981' }}>✓</span>{f}
+                </div>
+              ))}
+              <Link href="/brief" style={{
+                display: 'block', textAlign: 'center', marginTop: 20,
+                padding: '12px', borderRadius: 10, fontSize: 14, fontWeight: 600,
+                border: '1px solid #2A3550', color: '#94A3C0', textDecoration: 'none',
+              }}>Koop Starter</Link>
             </div>
 
             {/* Pro */}
@@ -299,14 +322,14 @@ export default function LandingPage() {
                 padding: '4px 12px', borderRadius: 6, fontSize: 10, fontWeight: 700,
                 background: 'linear-gradient(135deg, #3B82F6, #10B981)', color: '#FFF',
                 letterSpacing: 1, fontFamily: "'JetBrains Mono', monospace",
-              }}>POPULAIR</span>
+              }}>LAUNCH PRIJS</span>
               <div style={{ fontSize: 12, fontWeight: 600, color: '#3B82F6', marginBottom: 4 }}>PRO</div>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-                <span style={{ fontSize: 36, fontWeight: 800, color: '#F0F2F7' }}>€19,99</span>
+                <span style={{ fontSize: 36, fontWeight: 800, color: '#F0F2F7' }}>€9,99</span>
                 <span style={{ fontSize: 14, color: '#6B7A99' }}>/maand</span>
               </div>
-              <div style={{ fontSize: 13, color: '#6B7A99', marginBottom: 20 }}>onbeperkt alles</div>
-              {['Onbeperkt brieven', 'CV Builder (binnenkort)', 'Interview Prep (binnenkort)', 'LinkedIn Coach (binnenkort)', 'Prioriteit support'].map((f, i) => (
+              <div style={{ fontSize: 13, color: '#6B7A99', marginBottom: 20 }}>onbeperkt brieven</div>
+              {['Onbeperkt sollicitatiebrieven', 'Alle talen', 'CV Builder (binnenkort)', 'Interview Prep (binnenkort)', 'Prioriteit support'].map((f, i) => (
                 <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 10, fontSize: 13, color: '#D4DCE8' }}>
                   <span style={{ color: '#10B981' }}>✓</span>{f}
                 </div>
@@ -317,28 +340,6 @@ export default function LandingPage() {
                 background: 'linear-gradient(135deg, #3B82F6, #10B981)',
                 color: '#FFF', textDecoration: 'none',
               }}>Upgrade naar Pro</Link>
-            </div>
-
-            {/* Per brief */}
-            <div style={{
-              background: '#141B2D', borderRadius: 16, padding: 28,
-              border: '1px solid rgba(42,53,80,0.4)',
-            }}>
-              <div style={{ fontSize: 12, fontWeight: 600, color: '#6B7A99', marginBottom: 4 }}>PER BRIEF</div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-                <span style={{ fontSize: 36, fontWeight: 800, color: '#F0F2F7' }}>€6,99</span>
-              </div>
-              <div style={{ fontSize: 13, color: '#6B7A99', marginBottom: 20 }}>per motivatiebrief</div>
-              {['1 brief per betaling', 'Alle talen', 'Geen abonnement nodig'].map((f, i) => (
-                <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 10, fontSize: 13, color: '#D4DCE8' }}>
-                  <span style={{ color: '#10B981' }}>✓</span>{f}
-                </div>
-              ))}
-              <Link href="/brief" style={{
-                display: 'block', textAlign: 'center', marginTop: 20,
-                padding: '12px', borderRadius: 10, fontSize: 14, fontWeight: 600,
-                border: '1px solid #2A3550', color: '#94A3C0', textDecoration: 'none',
-              }}>Koop een brief</Link>
             </div>
           </div>
         </div>
@@ -395,7 +396,7 @@ export default function LandingPage() {
             Klaar om te solliciteren?
           </h2>
           <p style={{ fontSize: 16, color: '#94A3C0', margin: '0 0 28px', lineHeight: 1.6 }}>
-            Schrijf je eerste motivatiebrief in minder dan 30 seconden. Gratis, geen account nodig.
+            Schrijf je eerste sollicitatiebrief in minder dan 30 seconden. Gratis, geen account nodig.
           </p>
           <Link href="/brief" style={{
             padding: '16px 40px', borderRadius: 12, fontSize: 17, fontWeight: 700,

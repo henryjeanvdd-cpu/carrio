@@ -42,8 +42,20 @@ export async function POST(request) {
               stripe_subscription_id: session.subscription,
             })
             .eq('email', email);
+        } else if (plan === 'starter') {
+          // Add 3 paid brief credits
+          const { data: user } = await supabase
+            .from('users')
+            .select('paid_briefs')
+            .eq('email', email)
+            .single();
+
+          await supabase
+            .from('users')
+            .update({ paid_briefs: (user?.paid_briefs || 0) + 3 })
+            .eq('email', email);
         } else if (plan === 'single_brief') {
-          // Add 1 paid brief credit
+          // Legacy: Add 1 paid brief credit
           const { data: user } = await supabase
             .from('users')
             .select('paid_briefs')

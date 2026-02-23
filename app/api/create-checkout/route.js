@@ -48,7 +48,7 @@ export async function POST(request) {
     let sessionConfig;
 
     if (plan === 'pro') {
-      // Monthly subscription
+      // Monthly subscription - launch price
       sessionConfig = {
         customer: customerId,
         mode: 'subscription',
@@ -57,9 +57,9 @@ export async function POST(request) {
             currency: 'eur',
             product_data: {
               name: 'Carrio Pro',
-              description: 'Onbeperkt motivatiebrieven, CV Builder, Interview Prep & LinkedIn Coach',
+              description: 'Onbeperkt motivatiebrieven + alle toekomstige tools',
             },
-            unit_amount: 1999, // €19.99 in cents
+            unit_amount: 999, // €9.99 in cents
             recurring: { interval: 'month' },
           },
           quantity: 1,
@@ -68,8 +68,8 @@ export async function POST(request) {
         cancel_url: `${baseUrl}/brief?payment=cancelled`,
         metadata: { email: normalizedEmail, plan: 'pro' },
       };
-    } else {
-      // Single brief payment
+    } else if (plan === 'starter') {
+      // Starter pack - 3 brieven eenmalig
       sessionConfig = {
         customer: customerId,
         mode: 'payment',
@@ -77,17 +77,19 @@ export async function POST(request) {
           price_data: {
             currency: 'eur',
             product_data: {
-              name: 'Carrio Motivatiebrief',
-              description: 'Eén AI-gegenereerde motivatiebrief op maat',
+              name: 'Carrio Starter',
+              description: '3 AI-gegenereerde motivatiebrieven op maat',
             },
-            unit_amount: 699, // €6.99 in cents
+            unit_amount: 499, // €4.99 in cents
           },
           quantity: 1,
         }],
-        success_url: `${baseUrl}/brief?payment=success&plan=single`,
+        success_url: `${baseUrl}/brief?payment=success&plan=starter`,
         cancel_url: `${baseUrl}/brief?payment=cancelled`,
-        metadata: { email: normalizedEmail, plan: 'single_brief' },
+        metadata: { email: normalizedEmail, plan: 'starter' },
       };
+    } else {
+      return NextResponse.json({ error: 'Ongeldig plan' }, { status: 400 });
     }
 
     const session = await stripe.checkout.sessions.create(sessionConfig);

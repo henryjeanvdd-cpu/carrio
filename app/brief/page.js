@@ -214,7 +214,7 @@ export default function BriefApp() {
               fontSize: 26, fontWeight: 800, color: '#FFF',
             }}>C</div>
 
-            <h2 className="text-2xl font-bold text-[#F0F2F7] mb-2">Schrijf je motivatiebrief</h2>
+            <h2 className="text-2xl font-bold text-[#F0F2F7] mb-2">Schrijf je sollicitatiebrief</h2>
             <p className="text-sm text-[#6B7A99] mb-6 max-w-[360px] mx-auto leading-relaxed">
               Vul je emailadres in om te starten. Je eerste brief is gratis!
             </p>
@@ -305,7 +305,7 @@ export default function BriefApp() {
             {step === 2 && (
               <div>
                 <h2 className="text-xl font-bold text-[#F0F2F7] mb-1">Toon & taal</h2>
-                <p className="text-sm text-[#6B7A99] mb-5">Kies de stijl en taal van je motivatiebrief.</p>
+                <p className="text-sm text-[#6B7A99] mb-5">Kies de stijl en taal van je sollicitatiebrief.</p>
 
                 <label className={lbl + " !mb-2.5"}>Toon van de brief</label>
                 <div className="grid grid-cols-3 gap-2.5 mb-6">
@@ -359,7 +359,7 @@ export default function BriefApp() {
                   <div className="text-center py-16">
                     <div className="w-12 h-12 border-[3px] border-[#1C2438] border-t-[#3B82F6] rounded-full mx-auto mb-5" style={{ animation: 'spin 0.8s linear infinite' }} />
                     <div className="text-base font-semibold text-[#F0F2F7] mb-1.5">Je brief wordt geschreven...</div>
-                    <div className="text-sm text-[#6B7A99]">AI analyseert de vacature en schrijft een persoonlijke motivatiebrief</div>
+                    <div className="text-sm text-[#6B7A99]">AI analyseert de vacature en schrijft een persoonlijke sollicitatiebrief</div>
                   </div>
                 )}
 
@@ -379,7 +379,7 @@ export default function BriefApp() {
                 {!loading && !error && letter && (
                   <div>
                     <div className="flex justify-between items-center mb-4">
-                      <h2 className="text-xl font-bold text-[#F0F2F7]">Je motivatiebrief ✨</h2>
+                      <h2 className="text-xl font-bold text-[#F0F2F7]">Je sollicitatiebrief ✨</h2>
                       <button onClick={copy} className="px-4 py-2 text-xs rounded-lg cursor-pointer transition-colors" style={{
                         background: copied ? '#10B98120' : 'transparent',
                         border: `1px solid ${copied ? '#10B981' : '#2A3550'}`,
@@ -409,7 +409,7 @@ export default function BriefApp() {
                         borderColor: 'rgba(99,102,241,0.15)',
                         color: '#94A3C0',
                       }}>
-                        💡 <strong className="text-[#D4DCE8]">Tip:</strong> Met <button onClick={() => setShowPaywall(true)} className="text-[#60A5FA] underline cursor-pointer bg-transparent border-none font-inherit" style={{fontSize: 'inherit'}}>Carrio Pro</button> genereer je onbeperkt brieven en krijg je binnenkort ook de CV Builder en Interview Prep.
+                        💡 <strong className="text-[#D4DCE8]">Tip:</strong> Met <button onClick={() => setShowPaywall(true)} className="text-[#60A5FA] underline cursor-pointer bg-transparent border-none font-inherit" style={{fontSize: 'inherit'}}>Carrio Pro (€9,99/maand)</button> genereer je onbeperkt brieven en krijg je binnenkort ook de CV Builder en Interview Prep.
                       </div>
                     )}
                   </div>
@@ -461,31 +461,31 @@ export default function BriefApp() {
                   padding: '3px 10px', borderRadius: 4,
                   background: 'linear-gradient(135deg, #3B82F6, #10B981)', color: '#FFF',
                   fontFamily: "'JetBrains Mono', monospace",
-                }}>BESTE DEAL</span>
+                }}>LAUNCH PRIJS</span>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     <div style={{ fontSize: 15, fontWeight: 700, color: '#F0F2F7' }}>Carrio Pro</div>
                     <div style={{ fontSize: 12, color: '#6B7A99', marginTop: 2 }}>Onbeperkt brieven + alle toekomstige tools</div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: 22, fontWeight: 800, color: '#F0F2F7' }}>€19,99</div>
+                    <div style={{ fontSize: 22, fontWeight: 800, color: '#F0F2F7' }}>€9,99</div>
                     <div style={{ fontSize: 11, color: '#6B7A99' }}>/maand</div>
                   </div>
                 </div>
               </div>
 
-              {/* Single brief option */}
-              <div onClick={() => handleCheckout('single_brief')} style={{
+              {/* Starter option */}
+              <div onClick={() => handleCheckout('starter')} style={{
                 padding: '16px 18px', borderRadius: 12, cursor: 'pointer',
                 border: '1px solid rgba(42,53,80,0.5)', background: 'transparent',
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
-                    <div style={{ fontSize: 15, fontWeight: 700, color: '#F0F2F7' }}>Eén brief</div>
-                    <div style={{ fontSize: 12, color: '#6B7A99', marginTop: 2 }}>Betaal per brief, geen abonnement</div>
+                    <div style={{ fontSize: 15, fontWeight: 700, color: '#F0F2F7' }}>Starter</div>
+                    <div style={{ fontSize: 12, color: '#6B7A99', marginTop: 2 }}>3 brieven, geen abonnement</div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: 22, fontWeight: 800, color: '#F0F2F7' }}>€6,99</div>
+                    <div style={{ fontSize: 22, fontWeight: 800, color: '#F0F2F7' }}>€4,99</div>
                     <div style={{ fontSize: 11, color: '#6B7A99' }}>eenmalig</div>
                   </div>
                 </div>
