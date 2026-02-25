@@ -418,6 +418,7 @@ export default function LandingPage() {
             © 2026 Carrio. Gemaakt in Antwerpen 🇧🇪
           </p>
           <div style={{ display: 'flex', gap: 20, justifyContent: 'center', marginTop: 8 }}>
+              <a href="/over-ons" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>Over ons</a>
             <a href="#" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>Privacy</a>
             <a href="#" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>Voorwaarden</a>
             <a href="mailto:hello@carrio.be" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>Contact</a>
