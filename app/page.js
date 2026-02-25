@@ -90,6 +90,7 @@ export default function LandingPage() {
             <a href="#features" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>Features</a>
             <a href="#hoe-werkt-het" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>Hoe werkt het</a>
             <a href="#pricing" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>Pricing</a>
+                <Link href="/over-ons" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>Over Ons</Link>
             <Link href="/brief" style={{
               padding: '8px 20px', borderRadius: 8, fontSize: 13, fontWeight: 600,
               background: 'linear-gradient(135deg, #3B82F6, #10B981)',
