@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useLanguage } from '../lib/LanguageContext';
+import { useLanguage } from '@/lib/LanguageContext';
 
 const Logo = () => (
   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
