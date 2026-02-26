@@ -141,6 +141,7 @@ export default function InterviewPrep() {
   const [emailConfirmed, setEmailConfirmed] = useState(false);
   const [canGenerate, setCanGenerate] = useState(false);
   const [isPro, setIsPro] = useState(false);
+  const [isProPlus, setIsProPlus] = useState(false);
   const [briefsUsed, setBriefsUsed] = useState(0);
   const [showPaywall, setShowPaywall] = useState(false);
   const [checkingPayment, setCheckingPayment] = useState(false);
@@ -187,8 +188,9 @@ export default function InterviewPrep() {
       const data = await res.json();
       if (res.ok) {
         setEmailConfirmed(true);
-        setCanGenerate(data.canGenerate);
+        setCanGenerate(data.isProPlus || data.briefsUsed < 1);
         setIsPro(data.isPro);
+        setIsProPlus(data.isProPlus);
         setBriefsUsed(data.briefsUsed);
         if (!data.canGenerate && data.reason === 'limit_reached') {
           setShowPaywall(true);

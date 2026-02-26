@@ -66,6 +66,7 @@ export async function POST(request) {
       briefsUsed: user.briefs_used || 0,
       paidBriefs: user.paid_briefs || 0,
       isPro: user.is_pro || false,
+      isProPlus: user.is_pro_plus || false,
     });
   } catch (err) {
     console.error('Check usage error:', err);
