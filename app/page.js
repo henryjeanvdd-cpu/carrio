@@ -308,8 +308,8 @@ export default function LandingPage() {
               </div>
               <div style={{ fontSize: 13, color: '#6B7A99', marginBottom: 20 }}>{t.starter_period}</div>
               {[t.starter_f1, t.starter_f1b, t.starter_f2, t.starter_f3, t.starter_f4, t.starter_f5].map((f, i) => (
-                <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 10, fontSize: 13, color: '#D4DCE8' }}>
-                  <span style={{ color: '#10B981' }}>✓</span>{f}
+                <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 10, fontSize: 13, color: f && (f.startsWith('Geen') || f.startsWith('Pas d')) ? '#6B7A99' : '#D4DCE8' }}>
+                  <span style={{ color: f && (f.startsWith('Geen') || f.startsWith('Pas d')) ? '#EF4444' : '#10B981' }}>{f && (f.startsWith('Geen') || f.startsWith('Pas d')) ? '✗' : '✓'}</span>{f}
                 </div>
               ))}
               <Link href="/brief" style={{
@@ -337,8 +337,8 @@ export default function LandingPage() {
               </div>
               <div style={{ fontSize: 13, color: '#6B7A99', marginBottom: 20 }}>{t.pro_period_desc}</div>
               {[t.pro_f1, t.pro_f1b, t.pro_f2, t.pro_f3, t.pro_f4, t.pro_f5].map((f, i) => (
-                <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 10, fontSize: 13, color: '#D4DCE8' }}>
-                  <span style={{ color: '#10B981' }}>✓</span>{f}
+                <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 10, fontSize: 13, color: f && (f.startsWith('Geen') || f.startsWith('Pas d')) ? '#6B7A99' : '#D4DCE8' }}>
+                  <span style={{ color: f && (f.startsWith('Geen') || f.startsWith('Pas d')) ? '#EF4444' : '#10B981' }}>{f && (f.startsWith('Geen') || f.startsWith('Pas d')) ? '✗' : '✓'}</span>{f}
                 </div>
               ))}
               <Link href="/brief" style={{
