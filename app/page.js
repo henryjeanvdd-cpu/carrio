@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useLanguage } from '../lib/LanguageContext';
 
 const Logo = () => (
   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -15,54 +16,37 @@ const Logo = () => (
   </div>
 );
 
-const features = [
-  {
-    emoji: '✍️',
-    title: 'Sollicitatie- & Motivatiebrieven',
-    desc: 'AI schrijft overtuigende sollicitatiebrieven die perfect passen bij Belgische conventies. Formele aanspreking, taalkennis-nadruk, en een sterke call-to-action.',
-    tag: 'NU BESCHIKBAAR',
-    tagColor: '#10B981',
-  },
-  {
-    emoji: '📄',
-    title: 'CV Builder',
-    desc: 'Bouw professionele CV\'s die voldoen aan Belgische standaarden. VDAB-compatibel, Europass-ready, en direct exporteerbaar als PDF.',
-    tag: 'BINNENKORT',
-    tagColor: '#6366F1',
-  },
-  {
-    emoji: '🎤',
-    title: 'Interview Prep',
-    desc: 'Oefen met AI mock-interviews afgestemd op jouw sector en functie. Krijg direct feedback op je antwoorden.',
-    tag: 'BINNENKORT',
-    tagColor: '#6366F1',
-  },
-  {
-    emoji: '💼',
-    title: 'LinkedIn Coach',
-    desc: 'Optimaliseer je LinkedIn profiel en leer netwerken als een pro. Meer zichtbaarheid, meer kansen.',
-    tag: 'BINNENKORT',
-    tagColor: '#F59E0B',
-  },
-];
-
-const steps = [
-  { num: '1', title: 'Vertel over jezelf', desc: 'Vul je naam, ervaring, opleiding en talen in. Hoe meer context, hoe beter het resultaat.' },
-  { num: '2', title: 'Voeg de vacature toe', desc: 'Kopieer de vacaturetekst of vul de functietitel en het bedrijf in.' },
-  { num: '3', title: 'Kies toon & taal', desc: 'Professioneel, enthousiast of persoonlijk? In het Nederlands, Frans of Engels.' },
-  { num: '✨', title: 'Ontvang je brief', desc: 'AI genereert een persoonlijke motivatiebrief volgens Belgische conventies. Kopieer en verstuur!' },
-];
-
-const faqs = [
-  { q: 'In welke talen werkt Carrio?', a: 'Carrio genereert sollicitatiebrieven en motivatiebrieven in het Nederlands, Frans en Engels — de drie werktalen van België.' },
-  { q: 'Is mijn data veilig?', a: 'Absoluut. We slaan geen persoonlijke gegevens op na het genereren van je brief. Je data wordt niet gedeeld met derden.' },
-  { q: 'Wat is het verschil tussen een sollicitatiebrief en motivatiebrief?', a: 'In Vlaanderen wordt vaak "sollicitatiebrief" gebruikt, terwijl "motivatiebrief" meer voorkomt in Wallonië en internationale contexten. Carrio genereert beide — de inhoud is hetzelfde: een overtuigende brief op maat van de vacature.' },
-  { q: 'Wat maakt Carrio anders dan ChatGPT?', a: 'Carrio is specifiek gebouwd voor de Belgische arbeidsmarkt. We kennen de conventies: formele aanspreking, nadruk op taalkennis, VDAB/Actiris/Forem-compatibiliteit, en Belgische bedrijfscultuur.' },
-  { q: 'Moet ik betalen?', a: 'Je eerste sollicitatiebrief is gratis, zodat je de kwaliteit kunt ervaren. Daarna kies je voor het Starter-pakket (€4,99 voor 3 brieven) of een Pro-abonnement (€9,99/maand) voor onbeperkte toegang.' },
-  { q: 'Werkt het ook voor Wallonië en Brussel?', a: 'Ja! Carrio werkt voor heel België. Genereer brieven in het Frans voor Wallonië, Nederlands voor Vlaanderen, of Engels/Frans voor Brussel.' },
-];
+const LanguageSwitcher = () => {
+  const { lang, switchLang } = useLanguage();
+  return (
+    <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: '1px solid #2A3550' }}>
+      <button
+        onClick={() => switchLang('nl')}
+        style={{
+          padding: '4px 10px', fontSize: 11, fontWeight: 600, border: 'none', cursor: 'pointer',
+          background: lang === 'nl' ? 'linear-gradient(135deg, #3B82F6, #10B981)' : 'transparent',
+          color: lang === 'nl' ? '#FFF' : '#6B7A99',
+          fontFamily: "'JetBrains Mono', monospace",
+          transition: 'all 0.2s ease',
+        }}
+      >NL</button>
+      <button
+        onClick={() => switchLang('fr')}
+        style={{
+          padding: '4px 10px', fontSize: 11, fontWeight: 600, border: 'none', cursor: 'pointer',
+          borderLeft: '1px solid #2A3550',
+          background: lang === 'fr' ? 'linear-gradient(135deg, #3B82F6, #10B981)' : 'transparent',
+          color: lang === 'fr' ? '#FFF' : '#6B7A99',
+          fontFamily: "'JetBrains Mono', monospace",
+          transition: 'all 0.2s ease',
+        }}
+      >FR</button>
+    </div>
+  );
+};
 
 export default function LandingPage() {
+  const { t } = useLanguage();
   const [openFaq, setOpenFaq] = useState(null);
   const [scrolled, setScrolled] = useState(false);
 
@@ -71,6 +55,29 @@ export default function LandingPage() {
     window.addEventListener('scroll', handler);
     return () => window.removeEventListener('scroll', handler);
   }, []);
+
+  const features = [
+    { emoji: '✍️', title: t.feature1_title, desc: t.feature1_desc, tag: t.feature1_tag, tagColor: '#10B981' },
+    { emoji: '📄', title: t.feature2_title, desc: t.feature2_desc, tag: t.feature2_tag, tagColor: '#6366F1' },
+    { emoji: '🎤', title: t.feature3_title, desc: t.feature3_desc, tag: t.feature3_tag, tagColor: '#6366F1' },
+    { emoji: '💼', title: t.feature4_title, desc: t.feature4_desc, tag: t.feature4_tag, tagColor: '#F59E0B' },
+  ];
+
+  const steps = [
+    { num: '1', title: t.step1_title, desc: t.step1_desc },
+    { num: '2', title: t.step2_title, desc: t.step2_desc },
+    { num: '3', title: t.step3_title, desc: t.step3_desc },
+    { num: '✨', title: t.step4_title, desc: t.step4_desc },
+  ];
+
+  const faqs = [
+    { q: t.faq1_q, a: t.faq1_a },
+    { q: t.faq2_q, a: t.faq2_a },
+    { q: t.faq3_q, a: t.faq3_a },
+    { q: t.faq4_q, a: t.faq4_a },
+    { q: t.faq5_q, a: t.faq5_a },
+    { q: t.faq6_q, a: t.faq6_a },
+  ];
 
   return (
     <div style={{ minHeight: '100vh', background: '#0B0F1A', fontFamily: "'Outfit', sans-serif" }}>
@@ -87,14 +94,16 @@ export default function LandingPage() {
         <div style={{ maxWidth: 1080, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Logo />
           <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-            <a href="#features" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>Features</a>
-            <a href="#hoe-werkt-het" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>Hoe werkt het</a>
-            <a href="#pricing" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>Pricing</a>
+            <a href="#features" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>{t.nav_features}</a>
+            <a href="#hoe-werkt-het" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>{t.nav_how}</a>
+            <a href="#pricing" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>{t.nav_pricing}</a>
+            <Link href="/over-ons" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>{t.nav_about}</Link>
+            <LanguageSwitcher />
             <Link href="/brief" style={{
               padding: '8px 20px', borderRadius: 8, fontSize: 13, fontWeight: 600,
               background: 'linear-gradient(135deg, #3B82F6, #10B981)',
               color: '#FFF', textDecoration: 'none', border: 'none',
-            }}>Start gratis →</Link>
+            }}>{t.nav_cta}</Link>
           </div>
         </div>
       </nav>
@@ -103,7 +112,6 @@ export default function LandingPage() {
       <section style={{
         padding: '140px 24px 80px', textAlign: 'center', position: 'relative', overflow: 'hidden',
       }}>
-        {/* Glow effects */}
         <div style={{ position: 'absolute', top: '10%', left: '20%', width: 400, height: 400, background: 'radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', top: '20%', right: '15%', width: 350, height: 350, background: 'radial-gradient(circle, rgba(16,185,129,0.06) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
@@ -115,22 +123,22 @@ export default function LandingPage() {
               background: 'rgba(59,130,246,0.1)', color: '#60A5FA',
               border: '1px solid rgba(59,130,246,0.2)', marginBottom: 24,
               fontFamily: "'JetBrains Mono', monospace",
-            }}>🇧🇪 GEMAAKT VOOR BELGIË</span>
+            }}>{t.hero_badge}</span>
           </div>
 
           <h1 className="animate-fade-up delay-100" style={{
             fontSize: 'clamp(36px, 6vw, 64px)', fontWeight: 800, lineHeight: 1.1,
             color: '#F0F2F7', margin: '0 0 20px', opacity: 0,
           }}>
-            Je carrière,<br />
-            <span className="gradient-text">jouw kracht.</span>
+            {t.hero_title_1}<br />
+            <span className="gradient-text">{t.hero_title_2}</span>
           </h1>
 
           <p className="animate-fade-up delay-200" style={{
             fontSize: 'clamp(16px, 2vw, 19px)', color: '#94A3C0', maxWidth: 540,
             margin: '0 auto 32px', lineHeight: 1.7, opacity: 0,
           }}>
-            AI-powered sollicitatiebrieven, motivatiebrieven, CV's en interviewvoorbereiding. Specifiek voor de Belgische arbeidsmarkt. In het Nederlands, Frans én Engels.
+            {t.hero_subtitle}
           </p>
 
           <div className="animate-fade-up delay-300" style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', opacity: 0 }}>
@@ -139,23 +147,21 @@ export default function LandingPage() {
               background: 'linear-gradient(135deg, #3B82F6, #10B981)',
               color: '#FFF', textDecoration: 'none', display: 'inline-block',
               boxShadow: '0 4px 24px rgba(59,130,246,0.3)',
-            }}>Schrijf je eerste sollicitatiebrief — gratis ✨</Link>
+            }}>{t.hero_cta}</Link>
             <a href="#hoe-werkt-het" style={{
               padding: '14px 28px', borderRadius: 10, fontSize: 15, fontWeight: 600,
               background: 'transparent', color: '#94A3C0', textDecoration: 'none',
               border: '1px solid #2A3550', display: 'inline-block',
-            }}>Hoe werkt het?</a>
+            }}>{t.hero_cta2}</a>
           </div>
 
-          {/* Social proof */}
           <div className="animate-fade-up delay-400" style={{
-            display: 'flex', gap: 32, justifyContent: 'center', marginTop: 48,
-            opacity: 0,
+            display: 'flex', gap: 32, justifyContent: 'center', marginTop: 48, opacity: 0,
           }}>
             {[
-              { num: '1', label: 'gratis brief' },
-              { num: '< 30s', label: 'generatietijd' },
-              { num: '3', label: 'talen' },
+              { num: t.hero_stat1_num, label: t.hero_stat1_label },
+              { num: t.hero_stat2_num, label: t.hero_stat2_label },
+              { num: t.hero_stat3_num, label: t.hero_stat3_label },
             ].map((s, i) => (
               <div key={i} style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 24, fontWeight: 800, color: '#F0F2F7' }}>{s.num}</div>
@@ -173,9 +179,9 @@ export default function LandingPage() {
             <span style={{
               fontSize: 10, letterSpacing: 3, color: '#3B82F6', fontWeight: 600,
               fontFamily: "'JetBrains Mono', monospace",
-            }}>FEATURES</span>
+            }}>{t.features_label}</span>
             <h2 style={{ fontSize: 32, fontWeight: 800, color: '#F0F2F7', margin: '8px 0 0' }}>
-              Alles voor je carrière, op één plek.
+              {t.features_title}
             </h2>
           </div>
 
@@ -213,14 +219,13 @@ export default function LandingPage() {
             <span style={{
               fontSize: 10, letterSpacing: 3, color: '#10B981', fontWeight: 600,
               fontFamily: "'JetBrains Mono', monospace",
-            }}>HOE WERKT HET</span>
+            }}>{t.how_label}</span>
             <h2 style={{ fontSize: 32, fontWeight: 800, color: '#F0F2F7', margin: '8px 0 0' }}>
-              In 4 stappen naar je brief.
+              {t.how_title}
             </h2>
           </div>
 
           <div style={{ position: 'relative', paddingLeft: 48 }}>
-            {/* Vertical line */}
             <div style={{
               position: 'absolute', left: 18, top: 8, bottom: 8, width: 2,
               background: 'linear-gradient(180deg, #3B82F6, #6366F1, #10B981)',
@@ -229,7 +234,6 @@ export default function LandingPage() {
 
             {steps.map((step, i) => (
               <div key={i} style={{ position: 'relative', marginBottom: i < 3 ? 36 : 0 }}>
-                {/* Dot */}
                 <div style={{
                   position: 'absolute', left: -38, top: 2,
                   width: 28, height: 28, borderRadius: '50%',
@@ -251,7 +255,7 @@ export default function LandingPage() {
               padding: '14px 32px', borderRadius: 10, fontSize: 15, fontWeight: 700,
               background: 'linear-gradient(135deg, #3B82F6, #10B981)',
               color: '#FFF', textDecoration: 'none', display: 'inline-block',
-            }}>Probeer het nu — gratis →</Link>
+            }}>{t.how_cta}</Link>
           </div>
         </div>
       </section>
@@ -263,9 +267,9 @@ export default function LandingPage() {
             <span style={{
               fontSize: 10, letterSpacing: 3, color: '#F59E0B', fontWeight: 600,
               fontFamily: "'JetBrains Mono', monospace",
-            }}>PRICING</span>
+            }}>{t.pricing_label}</span>
             <h2 style={{ fontSize: 32, fontWeight: 800, color: '#F0F2F7', margin: '8px 0 0' }}>
-              Start gratis. Upgrade wanneer je wilt.
+              {t.pricing_title}
             </h2>
           </div>
 
@@ -275,10 +279,10 @@ export default function LandingPage() {
               background: '#141B2D', borderRadius: 16, padding: 28,
               border: '1px solid rgba(42,53,80,0.4)',
             }}>
-              <div style={{ fontSize: 12, fontWeight: 600, color: '#6B7A99', marginBottom: 4 }}>GRATIS</div>
-              <div style={{ fontSize: 36, fontWeight: 800, color: '#F0F2F7' }}>€0</div>
-              <div style={{ fontSize: 13, color: '#6B7A99', marginBottom: 20 }}>voor altijd</div>
-              {['1 sollicitatiebrief gratis', 'Nederlands, Frans & Engels', 'Kopieer met één klik'].map((f, i) => (
+              <div style={{ fontSize: 12, fontWeight: 600, color: '#6B7A99', marginBottom: 4 }}>{t.free_label}</div>
+              <div style={{ fontSize: 36, fontWeight: 800, color: '#F0F2F7' }}>{t.free_price}</div>
+              <div style={{ fontSize: 13, color: '#6B7A99', marginBottom: 20 }}>{t.free_period}</div>
+              {[t.free_f1, t.free_f2, t.free_f3].map((f, i) => (
                 <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 10, fontSize: 13, color: '#D4DCE8' }}>
                   <span style={{ color: '#10B981' }}>✓</span>{f}
                 </div>
@@ -287,7 +291,7 @@ export default function LandingPage() {
                 display: 'block', textAlign: 'center', marginTop: 20,
                 padding: '12px', borderRadius: 10, fontSize: 14, fontWeight: 600,
                 border: '1px solid #2A3550', color: '#94A3C0', textDecoration: 'none',
-              }}>Start gratis</Link>
+              }}>{t.free_cta}</Link>
             </div>
 
             {/* Starter */}
@@ -295,12 +299,12 @@ export default function LandingPage() {
               background: '#141B2D', borderRadius: 16, padding: 28,
               border: '1px solid rgba(42,53,80,0.4)',
             }}>
-              <div style={{ fontSize: 12, fontWeight: 600, color: '#10B981', marginBottom: 4 }}>STARTER</div>
+              <div style={{ fontSize: 12, fontWeight: 600, color: '#10B981', marginBottom: 4 }}>{t.starter_label}</div>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-                <span style={{ fontSize: 36, fontWeight: 800, color: '#F0F2F7' }}>€4,99</span>
+                <span style={{ fontSize: 36, fontWeight: 800, color: '#F0F2F7' }}>{t.starter_price}</span>
               </div>
-              <div style={{ fontSize: 13, color: '#6B7A99', marginBottom: 20 }}>eenmalig — 3 brieven</div>
-              {['3 sollicitatiebrieven', 'Alle talen', 'Geen abonnement nodig', 'Ideaal voor sollicitanten'].map((f, i) => (
+              <div style={{ fontSize: 13, color: '#6B7A99', marginBottom: 20 }}>{t.starter_period}</div>
+              {[t.starter_f1, t.starter_f2, t.starter_f3, t.starter_f4].map((f, i) => (
                 <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 10, fontSize: 13, color: '#D4DCE8' }}>
                   <span style={{ color: '#10B981' }}>✓</span>{f}
                 </div>
@@ -309,7 +313,7 @@ export default function LandingPage() {
                 display: 'block', textAlign: 'center', marginTop: 20,
                 padding: '12px', borderRadius: 10, fontSize: 14, fontWeight: 600,
                 border: '1px solid #2A3550', color: '#94A3C0', textDecoration: 'none',
-              }}>Koop Starter</Link>
+              }}>{t.starter_cta}</Link>
             </div>
 
             {/* Pro */}
@@ -322,14 +326,14 @@ export default function LandingPage() {
                 padding: '4px 12px', borderRadius: 6, fontSize: 10, fontWeight: 700,
                 background: 'linear-gradient(135deg, #3B82F6, #10B981)', color: '#FFF',
                 letterSpacing: 1, fontFamily: "'JetBrains Mono', monospace",
-              }}>LAUNCH PRIJS</span>
-              <div style={{ fontSize: 12, fontWeight: 600, color: '#3B82F6', marginBottom: 4 }}>PRO</div>
+              }}>{t.pro_badge}</span>
+              <div style={{ fontSize: 12, fontWeight: 600, color: '#3B82F6', marginBottom: 4 }}>{t.pro_label}</div>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-                <span style={{ fontSize: 36, fontWeight: 800, color: '#F0F2F7' }}>€9,99</span>
-                <span style={{ fontSize: 14, color: '#6B7A99' }}>/maand</span>
+                <span style={{ fontSize: 36, fontWeight: 800, color: '#F0F2F7' }}>{t.pro_price}</span>
+                <span style={{ fontSize: 14, color: '#6B7A99' }}>{t.pro_period_suffix}</span>
               </div>
-              <div style={{ fontSize: 13, color: '#6B7A99', marginBottom: 20 }}>onbeperkt brieven</div>
-              {['Onbeperkt sollicitatiebrieven', 'Alle talen', 'CV Builder (binnenkort)', 'Interview Prep (binnenkort)', 'Prioriteit support'].map((f, i) => (
+              <div style={{ fontSize: 13, color: '#6B7A99', marginBottom: 20 }}>{t.pro_period_desc}</div>
+              {[t.pro_f1, t.pro_f2, t.pro_f3, t.pro_f4].map((f, i) => (
                 <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 10, fontSize: 13, color: '#D4DCE8' }}>
                   <span style={{ color: '#10B981' }}>✓</span>{f}
                 </div>
@@ -339,7 +343,7 @@ export default function LandingPage() {
                 padding: '12px', borderRadius: 10, fontSize: 14, fontWeight: 700,
                 background: 'linear-gradient(135deg, #3B82F6, #10B981)',
                 color: '#FFF', textDecoration: 'none',
-              }}>Upgrade naar Pro</Link>
+              }}>{t.pro_cta}</Link>
             </div>
           </div>
         </div>
@@ -355,9 +359,9 @@ export default function LandingPage() {
             <span style={{
               fontSize: 10, letterSpacing: 3, color: '#6366F1', fontWeight: 600,
               fontFamily: "'JetBrains Mono', monospace",
-            }}>FAQ</span>
+            }}>{t.faq_label}</span>
             <h2 style={{ fontSize: 28, fontWeight: 800, color: '#F0F2F7', margin: '8px 0 0' }}>
-              Veelgestelde vragen
+              {t.faq_title}
             </h2>
           </div>
 
@@ -393,17 +397,17 @@ export default function LandingPage() {
       <section style={{ padding: '80px 24px', textAlign: 'center' }}>
         <div style={{ maxWidth: 520, margin: '0 auto' }}>
           <h2 style={{ fontSize: 32, fontWeight: 800, color: '#F0F2F7', margin: '0 0 12px' }}>
-            Klaar om te solliciteren?
+            {t.cta_title}
           </h2>
           <p style={{ fontSize: 16, color: '#94A3C0', margin: '0 0 28px', lineHeight: 1.6 }}>
-            Schrijf je eerste sollicitatiebrief in minder dan 30 seconden. Gratis, geen account nodig.
+            {t.cta_subtitle}
           </p>
           <Link href="/brief" style={{
             padding: '16px 40px', borderRadius: 12, fontSize: 17, fontWeight: 700,
             background: 'linear-gradient(135deg, #3B82F6, #10B981)',
             color: '#FFF', textDecoration: 'none', display: 'inline-block',
             boxShadow: '0 4px 32px rgba(59,130,246,0.3)',
-          }}>Start nu — het is gratis ✨</Link>
+          }}>{t.cta_button}</Link>
         </div>
       </section>
 
@@ -415,12 +419,13 @@ export default function LandingPage() {
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <Logo />
           <p style={{ fontSize: 12, color: '#6B7A99', marginTop: 12 }}>
-            © 2026 Carrio. Gemaakt in Antwerpen 🇧🇪
+            {t.footer_copy}
           </p>
           <div style={{ display: 'flex', gap: 20, justifyContent: 'center', marginTop: 8 }}>
-            <a href="#" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>Privacy</a>
-            <a href="#" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>Voorwaarden</a>
-            <a href="mailto:hello@carrio.be" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>Contact</a>
+            <a href="/over-ons" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>{t.footer_about}</a>
+            <a href="#" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>{t.footer_privacy}</a>
+            <a href="#" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>{t.footer_terms}</a>
+            <a href="mailto:hello@carrio.be" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>{t.footer_contact}</a>
           </div>
         </div>
       </footer>
