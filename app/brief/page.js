@@ -4,11 +4,18 @@ import { useState, useCallback, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/LanguageContext';
 
-const TONES = [
-  { id: 'professioneel', label: 'Professioneel', desc: 'Zakelijk en formeel', emoji: '👔' },
-  { id: 'enthousiast', label: 'Enthousiast', desc: 'Energiek en gedreven', emoji: '🔥' },
-  { id: 'persoonlijk', label: 'Persoonlijk', desc: 'Warm en authentiek', emoji: '💬' },
-];
+const TONES = {
+  nl: [
+    { id: "professioneel", label: "Professioneel", desc: "Zakelijk en formeel", emoji: "👔" },
+    { id: "enthousiast", label: "Enthousiast", desc: "Energiek en gedreven", emoji: "🔥" },
+    { id: "persoonlijk", label: "Persoonlijk", desc: "Warm en authentiek", emoji: "💬" },
+  ],
+  fr: [
+    { id: "professioneel", label: "Professionnel", desc: "Formel et serieux", emoji: "👔" },
+    { id: "enthousiast", label: "Enthousiaste", desc: "Dynamique et motive", emoji: "🔥" },
+    { id: "persoonlijk", label: "Personnel", desc: "Chaleureux et authentique", emoji: "💬" },
+  ],
+};
 
 const LANGS = [
   { id: 'nl', label: 'Nederlands' },
