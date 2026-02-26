@@ -232,7 +232,7 @@ export default function BriefApp() {
               <input
                 type="email"
                 className={inp + " !text-center !text-base !py-3.5 mb-3"}
-                placeholder="jouw@email.be"
+                placeholder={lang === "fr" ? "votre@email.be" : "jouw@email.be"}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleEmailSubmit()}
@@ -278,13 +278,13 @@ export default function BriefApp() {
                 <h2 className="text-xl font-bold text-[#F0F2F7] mb-1">Over jou</h2>
                 <p className="text-sm text-[#6B7A99] mb-5">Vertel over je achtergrond voor een persoonlijke brief.</p>
 
-                <div className="mb-4"><label className={lbl}>Volledige naam *</label><input className={inp} placeholder="Jan Peeters" value={naam} onChange={(e) => setNaam(e.target.value)} /></div>
-                <div className="mb-4"><label className={lbl}>Huidige / gewenste functie *</label><input className={inp} placeholder="Marketing Manager, Software Developer, ..." value={functie} onChange={(e) => setFunctie(e.target.value)} /></div>
-                <div className="mb-4"><label className={lbl}>Werkervaring (kort samenvatten) *</label><textarea className={ta} placeholder="Bijv: 3 jaar als digital marketer bij een Antwerps e-commerce bedrijf." value={ervaring} onChange={(e) => setErvaring(e.target.value)} /></div>
-                <div className="mb-4"><label className={lbl}>Opleiding</label><input className={inp} placeholder="Bachelor Bedrijfsmanagement — Artesis Hogeschool Antwerpen" value={opleiding} onChange={(e) => setOpleiding(e.target.value)} /></div>
+                <div className="mb-4"><label className={lbl}>Volledige naam *</label><input className={inp} placeholder={lang === "fr" ? "Jean Dupont" : "Jan Peeters"} value={naam} onChange={(e) => setNaam(e.target.value)} /></div>
+                <div className="mb-4"><label className={lbl}>Huidige / gewenste functie *</label><input className={inp} placeholder={lang === "fr" ? "Responsable Marketing, Developpeur, ..." : "Marketing Manager, Software Developer, ..."} value={functie} onChange={(e) => setFunctie(e.target.value)} /></div>
+                <div className="mb-4"><label className={lbl}>Werkervaring (kort samenvatten) *</label><textarea className={ta} placeholder={lang === "fr" ? "Ex: 3 ans comme digital marketer dans une entreprise e-commerce." : "Bijv: 3 jaar als digital marketer bij een Antwerps e-commerce bedrijf."} value={ervaring} onChange={(e) => setErvaring(e.target.value)} /></div>
+                <div className="mb-4"><label className={lbl}>Opleiding</label><input className={inp} placeholder={lang === "fr" ? "Bachelor en Gestion — Haute Ecole de Bruxelles" : "Bachelor Bedrijfsmanagement — Artesis Hogeschool Antwerpen"} value={opleiding} onChange={(e) => setOpleiding(e.target.value)} /></div>
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="mb-4"><label className={lbl}>Talen 🇧🇪</label><input className={inp} placeholder="NL, FR, EN" value={talen} onChange={(e) => setTalen(e.target.value)} /></div>
-                  <div className="mb-4"><label className={lbl}>Vaardigheden</label><input className={inp} placeholder="Excel, Photoshop, ..." value={skills} onChange={(e) => setSkills(e.target.value)} /></div>
+                  <div className="mb-4"><label className={lbl}>Talen 🇧🇪</label><input className={inp} placeholder={lang === "fr" ? "FR, NL, EN" : "NL, FR, EN"} value={talen} onChange={(e) => setTalen(e.target.value)} /></div>
+                  <div className="mb-4"><label className={lbl}>Vaardigheden</label><input className={inp} placeholder={lang === "fr" ? "Excel, Photoshop, ..." : "Excel, Photoshop, ..."} value={skills} onChange={(e) => setSkills(e.target.value)} /></div>
                 </div>
 
                 <div className="flex justify-end mt-6">
@@ -299,9 +299,9 @@ export default function BriefApp() {
                 <h2 className="text-xl font-bold text-[#F0F2F7] mb-1">De vacature</h2>
                 <p className="text-sm text-[#6B7A99] mb-5">Voor welke functie solliciteer je?</p>
 
-                <div className="mb-4"><label className={lbl}>Functietitel *</label><input className={inp} placeholder="Digital Marketing Specialist" value={vacatureTitel} onChange={(e) => setVacatureTitel(e.target.value)} /></div>
-                <div className="mb-4"><label className={lbl}>Bedrijf *</label><input className={inp} placeholder="Coolblue, Telenet, KBC, ..." value={bedrijf} onChange={(e) => setBedrijf(e.target.value)} /></div>
-                <div className="mb-4"><label className={lbl}>Vacaturetekst <span className="font-normal text-[#3A4560]">(optioneel maar aanbevolen)</span></label><textarea className={ta + " !min-h-[140px]"} placeholder="Kopieer en plak hier de volledige vacaturetekst." value={vacatureTekst} onChange={(e) => setVacatureTekst(e.target.value)} /></div>
+                <div className="mb-4"><label className={lbl}>Functietitel *</label><input className={inp} placeholder={lang === "fr" ? "Specialiste Marketing Digital" : "Digital Marketing Specialist"} value={vacatureTitel} onChange={(e) => setVacatureTitel(e.target.value)} /></div>
+                <div className="mb-4"><label className={lbl}>Bedrijf *</label><input className={inp} placeholder={lang === "fr" ? "Proximus, Belfius, Delhaize, ..." : "Coolblue, Telenet, KBC, ..."} value={bedrijf} onChange={(e) => setBedrijf(e.target.value)} /></div>
+                <div className="mb-4"><label className={lbl}>{lang === 'fr' ? 'Texte de l offre' : 'Vacaturetekst'} <span className="font-normal text-[#3A4560]">{lang === "fr" ? "(optionnel mais recommande)" : "(optioneel maar aanbevolen)"}</span></label><textarea className={ta + " !min-h-[140px]"} placeholder={lang === "fr" ? "Copiez et collez ici le texte complet de l offre." : "Kopieer en plak hier de volledige vacaturetekst."} value={vacatureTekst} onChange={(e) => setVacatureTekst(e.target.value)} /></div>
 
                 <div className="flex justify-between mt-6">
                   <button onClick={back} className="px-7 py-3 rounded-lg text-sm font-medium text-[#6B7A99] border border-[#2A3550] cursor-pointer">← Terug</button>
