@@ -657,6 +657,29 @@ export default function InterviewPrep() {
                   </div>
                 </div>
               </div>
+              <div onClick={() => handleCheckout('proplus')} style={{
+                padding: '16px 18px', borderRadius: 12, cursor: 'pointer',
+                border: '2px solid #F59E0B', background: 'rgba(245,158,11,0.06)',
+                position: 'relative',
+              }}>
+                <span style={{
+                  position: 'absolute', top: -8, right: 14,
+                  fontSize: 9, fontWeight: 700, letterSpacing: 1,
+                  padding: '3px 10px', borderRadius: 4,
+                  background: 'linear-gradient(135deg, #F59E0B, #EF4444)', color: '#FFF',
+                  fontFamily: "'JetBrains Mono', monospace",
+                }}>BESTE DEAL</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <div style={{ fontSize: 15, fontWeight: 700, color: '#F0F2F7' }}>Carrio Pro+</div>
+                    <div style={{ fontSize: 12, color: '#6B7A99', marginTop: 2 }}>{T.proDesc}</div>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: 22, fontWeight: 800, color: '#F0F2F7' }}>€14,99</div>
+                    <div style={{ fontSize: 11, color: '#6B7A99' }}>/maand</div>
+                  </div>
+                </div>
+              </div>
               <div onClick={() => handleCheckout('starter')} style={{
                 padding: '16px 18px', borderRadius: 12, cursor: 'pointer',
                 border: '1px solid rgba(42,53,80,0.5)', background: 'transparent',
