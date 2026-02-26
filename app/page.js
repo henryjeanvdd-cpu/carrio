@@ -194,14 +194,14 @@ export default function LandingPage() {
                 transition: 'border-color 0.3s, transform 0.3s',
               }}>
                 <div style={{ fontSize: 32, marginBottom: 12 }}>{f.emoji}</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-                  <h3 style={{ fontSize: 17, fontWeight: 700, color: '#F0F2F7', margin: 0 }}>{f.title}</h3>
+                <div style={{  }}>
                   <span style={{
                     fontSize: 8, fontWeight: 700, letterSpacing: 1,
                     padding: '3px 8px', borderRadius: 4,
                     background: `${f.tagColor}18`, color: f.tagColor,
                     fontFamily: "'JetBrains Mono', monospace",
                   }}>{f.tag}</span>
+                  <h3 style={{ fontSize: 17, fontWeight: 700, color: '#F0F2F7', margin: '6px 0 0' }}>{f.title}</h3>
                 </div>
                 <p style={{ fontSize: 13, color: '#94A3C0', lineHeight: 1.7, margin: 0 }}>{f.desc}</p>
               </div>
