@@ -145,6 +145,19 @@ export default function CVBuilder() {
   const ta = inp + " resize-y min-h-[100px]";
   const lbl = "block text-xs font-semibold text-[#6B7A99] mb-1.5";
 
+
+  useEffect(() => {
+    document.title = 'AI CV Builder | Carrio';
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', 'Maak een professioneel CV met AI. Belgische standaarden, VDAB-compatibel, direct exporteerbaar als PDF.');
+    else {
+      const meta = document.createElement('meta');
+      meta.name = 'description';
+      meta.content = 'Maak een professioneel CV met AI. Belgische standaarden, VDAB-compatibel, direct exporteerbaar als PDF.';
+      document.head.appendChild(meta);
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#0B0F1A]" style={{ fontFamily: "'Outfit', sans-serif" }}>
       <header className="border-b border-[#2A355030] bg-[#141B2D80]" style={{ backdropFilter: 'blur(12px)' }}>

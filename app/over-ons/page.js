@@ -1,10 +1,25 @@
 'use client';
 
+import { useEffect } from 'react';
+
 import Link from 'next/link';
 import { useLanguage } from '../../lib/LanguageContext';
 
 export default function OverOns() {
   const { t } = useLanguage();
+
+
+  useEffect(() => {
+    document.title = 'Over Carrio | AI Career Toolkit voor Belgie';
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', 'Carrio is de eerste AI career toolkit specifiek gebouwd voor de Belgische arbeidsmarkt. Gemaakt in Antwerpen.');
+    else {
+      const meta = document.createElement('meta');
+      meta.name = 'description';
+      meta.content = 'Carrio is de eerste AI career toolkit specifiek gebouwd voor de Belgische arbeidsmarkt. Gemaakt in Antwerpen.';
+      document.head.appendChild(meta);
+    }
+  }, []);
 
   return (
     <div style={{ minHeight: '100vh', background: '#0a0b14', color: '#F0F2F7' }}>

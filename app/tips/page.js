@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect } from 'react';
+
 import Link from 'next/link';
 import { useLanguage } from '@/lib/LanguageContext';
 import { articles } from './articles';
@@ -23,6 +25,19 @@ export default function TipsOverview() {
   };
 
   const T = t[lang] || t.nl;
+
+
+  useEffect(() => {
+    document.title = 'Tips & Advies voor Solliciteren in Belgie | Carrio';
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', 'Praktische tips over sollicitatiebrieven, CVs en sollicitatiegesprekken voor de Belgische arbeidsmarkt.');
+    else {
+      const meta = document.createElement('meta');
+      meta.name = 'description';
+      meta.content = 'Praktische tips over sollicitatiebrieven, CVs en sollicitatiegesprekken voor de Belgische arbeidsmarkt.';
+      document.head.appendChild(meta);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#0B0F1A]" style={{ fontFamily: "'Outfit', sans-serif" }}>

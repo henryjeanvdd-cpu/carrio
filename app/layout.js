@@ -47,6 +47,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="nl-BE">
+      <head>
+        <link rel="alternate" hrefLang="nl-BE" href="https://carrio.be" />
+        <link rel="alternate" hrefLang="fr-BE" href="https://carrio.be" />
+        <link rel="alternate" hrefLang="x-default" href="https://carrio.be" />
+      </head>
       <body>
         <LanguageProvider>
           {children}

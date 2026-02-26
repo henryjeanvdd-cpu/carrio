@@ -290,6 +290,19 @@ export default function InterviewPrep() {
   const ta = inp + " resize-y min-h-[120px]";
   const lbl = "block text-xs font-semibold text-[#6B7A99] mb-1.5";
 
+
+  useEffect(() => {
+    document.title = 'AI Interview Prep | Carrio';
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', 'Bereid je sollicitatiegesprek voor met AI mock-interviews. Op maat van jouw functie en de Belgische arbeidsmarkt.');
+    else {
+      const meta = document.createElement('meta');
+      meta.name = 'description';
+      meta.content = 'Bereid je sollicitatiegesprek voor met AI mock-interviews. Op maat van jouw functie en de Belgische arbeidsmarkt.';
+      document.head.appendChild(meta);
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#0B0F1A]" style={{ fontFamily: "'Outfit', sans-serif" }}>
       {/* Header */}
