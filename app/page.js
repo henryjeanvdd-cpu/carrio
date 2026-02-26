@@ -275,7 +275,7 @@ export default function LandingPage() {
             </h2>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
             {/* Free */}
             <div style={{
               background: '#141B2D', borderRadius: 16, padding: 28,
@@ -346,6 +346,36 @@ export default function LandingPage() {
                 background: 'linear-gradient(135deg, #3B82F6, #10B981)',
                 color: '#FFF', textDecoration: 'none',
               }}>{t.pro_cta}</Link>
+            </div>
+
+            {/* Pro+ */}
+            <div style={{
+              background: "#141B2D", borderRadius: 16, padding: 28,
+              border: "2px solid #F59E0B", position: "relative",
+            }}>
+              <span style={{
+                position: "absolute", top: -10, right: 16,
+                padding: "4px 12px", borderRadius: 6, fontSize: 10, fontWeight: 700,
+                background: "linear-gradient(135deg, #F59E0B, #EF4444)", color: "#FFF",
+                letterSpacing: 1, fontFamily: "'JetBrains Mono', monospace",
+              }}>{t.proplus_badge}</span>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "#F59E0B", marginBottom: 4 }}>{t.proplus_label}</div>
+              <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
+                <span style={{ fontSize: 36, fontWeight: 800, color: "#F0F2F7" }}>{t.proplus_price}</span>
+                <span style={{ fontSize: 14, color: "#6B7A99" }}>{t.proplus_period_suffix}</span>
+              </div>
+              <div style={{ fontSize: 13, color: "#6B7A99", marginBottom: 20 }}>{t.proplus_period_desc}</div>
+              {[t.proplus_f1, t.proplus_f2, t.proplus_f3, t.proplus_f4, t.proplus_f5, t.proplus_f6].map((f, i) => (
+                <div key={i} style={{ display: "flex", gap: 8, marginBottom: 10, fontSize: 13, color: "#D4DCE8" }}>
+                  <span style={{ color: "#10B981" }}>✓</span>{f}
+                </div>
+              ))}
+              <Link href="/interview" style={{
+                display: "block", textAlign: "center", marginTop: 20,
+                padding: "12px", borderRadius: 10, fontSize: 14, fontWeight: 700,
+                background: "linear-gradient(135deg, #F59E0B, #EF4444)",
+                color: "#FFF", textDecoration: "none",
+              }}>{t.proplus_cta}</Link>
             </div>
           </div>
         </div>
