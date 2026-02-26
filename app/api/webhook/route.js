@@ -42,6 +42,17 @@ export async function POST(request) {
               stripe_subscription_id: session.subscription,
             })
             .eq('email', email);
+        } else if (plan === 'proplus') {
+          // Activate Pro+ subscription
+          await supabase
+            .from('users')
+            .update({
+              is_pro: true,
+              is_pro_plus: true,
+              pro_since: new Date().toISOString(),
+              stripe_subscription_id: session.subscription,
+            })
+            .eq('email', email);
         } else if (plan === 'starter') {
           // Add 3 paid brief credits
           const { data: user } = await supabase
@@ -79,6 +90,7 @@ export async function POST(request) {
           .from('users')
           .update({
             is_pro: false,
+            is_pro_plus: false,
             stripe_subscription_id: null,
           })
           .eq('stripe_customer_id', customerId);
