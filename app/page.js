@@ -100,7 +100,6 @@ export default function LandingPage() {
             <Link href="/over-ons" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>{t.nav_about}</Link>
             <Link href="/cv" style={{ fontSize: 13, color: '#818CF8', textDecoration: 'none', fontWeight: 600 }}>CV Builder</Link>
             <Link href="/interview" style={{ fontSize: 13, color: '#F59E0B', textDecoration: 'none', fontWeight: 600 }}>Interview Prep</Link>
-            <Link href="/interview" style={{ fontSize: 13, color: '#F59E0B', textDecoration: 'none', fontWeight: 600 }}>Interview Prep</Link>
             <LanguageSwitcher />
             <Link href="/brief" style={{
               padding: '8px 20px', borderRadius: 8, fontSize: 13, fontWeight: 600,
