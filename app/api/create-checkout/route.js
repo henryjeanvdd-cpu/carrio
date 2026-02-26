@@ -88,6 +88,28 @@ export async function POST(request) {
         cancel_url: `${baseUrl}/brief?payment=cancelled`,
         metadata: { email: normalizedEmail, plan: 'starter' },
       };
+
+    } else if (plan === 'proplus') {
+      // Pro+ subscription - alles onbeperkt
+      sessionConfig = {
+        customer: customerId,
+        mode: 'subscription',
+        line_items: [{
+          price_data: {
+            currency: 'eur',
+            product_data: {
+              name: 'Carrio Pro+',
+              description: 'Onbeperkt brieven, CV builder & interview prep',
+            },
+            unit_amount: 1499, // €14.99 in cents
+            recurring: { interval: 'month' },
+          },
+          quantity: 1,
+        }],
+        success_url: `${baseUrl}/brief?payment=success&plan=proplus`,
+        cancel_url: `${baseUrl}/brief?payment=cancelled`,
+        metadata: { email: normalizedEmail, plan: 'proplus' },
+      };
     } else {
       return NextResponse.json({ error: 'Ongeldig plan' }, { status: 400 });
     }
