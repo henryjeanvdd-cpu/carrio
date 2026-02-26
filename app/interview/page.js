@@ -50,7 +50,7 @@ const t = {
     opnieuw: 'Nieuw interview',
     pasAan: '\u2190 Pas antwoorden aan',
     nogEen: 'Nog een sessie',
-    proTip: 'Met Carrio Pro (\u20ac9,99/maand) oefen je onbeperkt interviews. Maandelijks opzegbaar.',
+    proTip: 'Met Carrio Pro (€9,99/maand) oefen je onbeperkt interviews. Maandelijks opzegbaar.',
     genError: 'Generatie mislukt',
     retry: 'Opnieuw',
     freeTag: '1 GRATIS SESSIE',
@@ -110,7 +110,7 @@ const t = {
     opnieuw: 'Nouvel entretien',
     pasAan: '\u2190 Modifier les reponses',
     nogEen: 'Encore une session',
-    proTip: 'Avec Carrio Pro (\u20ac9,99/mois) entrainez-vous sans limites. Resiliable mensuellement.',
+    proTip: 'Avec Carrio Pro (€9,99/mois) entrainez-vous sans limites. Resiliable mensuellement.',
     genError: 'Echec de la generation',
     retry: 'Reessayer',
     freeTag: '1 SESSION GRATUITE',
@@ -654,7 +654,7 @@ export default function InterviewPrep() {
                     <div style={{ fontSize: 12, color: '#6B7A99', marginTop: 2 }}>{T.proDesc}</div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: 22, fontWeight: 800, color: '#F0F2F7' }}>\u20ac9,99</div>
+                    <div style={{ fontSize: 22, fontWeight: 800, color: '#F0F2F7' }}>€9,99</div>
                     <div style={{ fontSize: 11, color: '#6B7A99' }}>/maand</div>
                   </div>
                 </div>
@@ -692,7 +692,7 @@ export default function InterviewPrep() {
                     <div style={{ fontSize: 12, color: '#6B7A99', marginTop: 2 }}>{T.starterDesc}</div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: 22, fontWeight: 800, color: '#F0F2F7' }}>\u20ac4,99</div>
+                    <div style={{ fontSize: 22, fontWeight: 800, color: '#F0F2F7' }}>€4,99</div>
                     <div style={{ fontSize: 11, color: '#6B7A99' }}>eenmalig</div>
                   </div>
                 </div>

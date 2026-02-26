@@ -502,7 +502,7 @@ export default function BriefApp() {
                     <div style={{ fontSize: 12, color: '#6B7A99', marginTop: 2 }}>Alles onbeperkt incl. interview prep</div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: 22, fontWeight: 800, color: '#F0F2F7' }}>\u20ac14,99</div>
+                    <div style={{ fontSize: 22, fontWeight: 800, color: '#F0F2F7' }}>€14,99</div>
                     <div style={{ fontSize: 11, color: '#6B7A99' }}>/maand</div>
                   </div>
                 </div>
