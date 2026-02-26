@@ -1,434 +1,348 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/LanguageContext';
 
-const Logo = () => (
-  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-    <div style={{
-      width: 36, height: 36, borderRadius: 10,
-      background: 'linear-gradient(135deg, #3B82F6, #10B981)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      fontSize: 18, fontWeight: 800, color: '#FFF',
-    }}>C</div>
-    <span style={{ fontSize: 20, fontWeight: 700, color: '#F0F2F7', letterSpacing: 0.5 }}>Carrio</span>
-  </div>
-);
-
-const LanguageSwitcher = () => {
-  const { lang, switchLang } = useLanguage();
-  return (
-    <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', border: '1px solid #2A3550' }}>
-      <button
-        onClick={() => switchLang('nl')}
-        style={{
-          padding: '4px 10px', fontSize: 11, fontWeight: 600, border: 'none', cursor: 'pointer',
-          background: lang === 'nl' ? 'linear-gradient(135deg, #3B82F6, #10B981)' : 'transparent',
-          color: lang === 'nl' ? '#FFF' : '#6B7A99',
-          fontFamily: "'JetBrains Mono', monospace",
-          transition: 'all 0.2s ease',
-        }}
-      >NL</button>
-      <button
-        onClick={() => switchLang('fr')}
-        style={{
-          padding: '4px 10px', fontSize: 11, fontWeight: 600, border: 'none', cursor: 'pointer',
-          borderLeft: '1px solid #2A3550',
-          background: lang === 'fr' ? 'linear-gradient(135deg, #3B82F6, #10B981)' : 'transparent',
-          color: lang === 'fr' ? '#FFF' : '#6B7A99',
-          fontFamily: "'JetBrains Mono', monospace",
-          transition: 'all 0.2s ease',
-        }}
-      >FR</button>
-    </div>
-  );
-};
-
-export default function LandingPage() {
-  const { t } = useLanguage();
-  const [openFaq, setOpenFaq] = useState(null);
-  const [scrolled, setScrolled] = useState(false);
+export default function CVBuilder() {
+  const { t, lang } = useLanguage();
+  const [email, setEmail] = useState('');
+  const [emailConfirmed, setEmailConfirmed] = useState(false);
+  const [canGenerate, setCanGenerate] = useState(false);
+  const [isPro, setIsPro] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
+  const [step, setStep] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [generatedSummary, setGeneratedSummary] = useState('');
+  const [pdfUrl, setPdfUrl] = useState('');
+  const [naam, setNaam] = useState('');
+  const [telefoon, setTelefoon] = useState('');
+  const [adres, setAdres] = useState('');
+  const [linkedin, setLinkedin] = useState('');
+  const [gewensteFunctie, setGewensteFunctie] = useState('');
+  const [ervaring, setErvaring] = useState([{ functie: '', bedrijf: '', van: '', tot: '', beschrijving: '' }]);
+  const [opleiding, setOpleiding] = useState([{ diploma: '', school: '', jaar: '' }]);
+  const [vaardigheden, setVaardigheden] = useState('');
+  const [talen, setTalen] = useState('');
+  const [taal, setTaal] = useState('nl');
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handler);
-    return () => window.removeEventListener('scroll', handler);
+    const savedEmail = localStorage.getItem('carrio_email');
+    if (savedEmail) { setEmail(savedEmail); checkUsage(savedEmail); }
   }, []);
 
-  const features = [
-    { emoji: '✍️', title: t.feature1_title, desc: t.feature1_desc, tag: t.feature1_tag, tagColor: '#10B981' },
-    { emoji: '📄', title: t.feature2_title, desc: t.feature2_desc, tag: t.feature2_tag, tagColor: '#6366F1' },
-    { emoji: '🎤', title: t.feature3_title, desc: t.feature3_desc, tag: t.feature3_tag, tagColor: '#6366F1' },
-    { emoji: '💼', title: t.feature4_title, desc: t.feature4_desc, tag: t.feature4_tag, tagColor: '#F59E0B' },
-  ];
+  const checkUsage = async (emailToCheck) => {
+    try {
+      const res = await fetch('/api/check-usage', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: emailToCheck }) });
+      const data = await res.json();
+      if (res.ok) { setEmailConfirmed(true); setCanGenerate(data.canGenerate); setIsPro(data.isPro); if (!data.canGenerate && data.reason === 'limit_reached') setShowPaywall(true); }
+    } catch (err) { setEmailConfirmed(true); setCanGenerate(true); }
+  };
 
-  const steps = [
-    { num: '1', title: t.step1_title, desc: t.step1_desc },
-    { num: '2', title: t.step2_title, desc: t.step2_desc },
-    { num: '3', title: t.step3_title, desc: t.step3_desc },
-    { num: '✨', title: t.step4_title, desc: t.step4_desc },
-  ];
+  const handleEmailSubmit = async () => {
+    if (!email.includes('@') || !email.includes('.')) return;
+    localStorage.setItem('carrio_email', email.toLowerCase().trim());
+    await checkUsage(email);
+  };
 
-  const faqs = [
-    { q: t.faq1_q, a: t.faq1_a },
-    { q: t.faq2_q, a: t.faq2_a },
-    { q: t.faq3_q, a: t.faq3_a },
-    { q: t.faq4_q, a: t.faq4_a },
-    { q: t.faq5_q, a: t.faq5_a },
-    { q: t.faq6_q, a: t.faq6_a },
-  ];
+  const handleCheckout = async (plan) => {
+    try {
+      const res = await fetch('/api/create-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, plan }) });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } catch (err) { alert('Kan betaalvenster niet openen.'); }
+  };
+
+  const addErvaring = () => setErvaring([...ervaring, { functie: '', bedrijf: '', van: '', tot: '', beschrijving: '' }]);
+  const removeErvaring = (i) => setErvaring(ervaring.filter((_, idx) => idx !== i));
+  const updateErvaring = (i, field, val) => { const c = [...ervaring]; c[i][field] = val; setErvaring(c); };
+  const addOpleiding = () => setOpleiding([...opleiding, { diploma: '', school: '', jaar: '' }]);
+  const removeOpleiding = (i) => setOpleiding(opleiding.filter((_, idx) => idx !== i));
+  const updateOpleiding = (i, field, val) => { const c = [...opleiding]; c[i][field] = val; setOpleiding(c); };
+
+  const next = () => setStep((s) => Math.min(s + 1, 4));
+  const back = () => setStep((s) => Math.max(s - 1, 0));
+  const s0ok = naam.trim() && gewensteFunctie.trim();
+  const s1ok = ervaring[0]?.functie?.trim() && ervaring[0]?.bedrijf?.trim();
+  const s2ok = opleiding[0]?.diploma?.trim() && opleiding[0]?.school?.trim();
+
+  const generateCV = useCallback(async () => {
+    setStep(4); setLoading(true); setError(''); setPdfUrl('');
+    try {
+      const res = await fetch('/api/generate-cv', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, naam, functie: gewensteFunctie, ervaring, opleiding, vaardigheden, talen, taal }) });
+      const data = await res.json();
+      if (data.error === 'LIMIT_REACHED') { setShowPaywall(true); setLoading(false); setStep(3); return; }
+      if (!res.ok) throw new Error(data.error || 'Generatie mislukt');
+      setGeneratedSummary(data.summary);
+      await buildPDF(data.summary);
+    } catch (err) { setError(err.message); }
+    setLoading(false);
+  }, [email, naam, gewensteFunctie, ervaring, opleiding, vaardigheden, talen, taal]);
+
+  const buildPDF = async (summary) => {
+    const { pdf, Document, Page, Text, View, StyleSheet } = await import('@react-pdf/renderer');
+    const s = StyleSheet.create({
+      page: { padding: 40, fontFamily: 'Helvetica', fontSize: 10, color: '#1a1a2e' },
+      header: { marginBottom: 20, borderBottomWidth: 2, borderBottomColor: '#3B82F6', paddingBottom: 15 },
+      name: { fontSize: 24, fontWeight: 'bold', color: '#1a1a2e', marginBottom: 4 },
+      role: { fontSize: 13, color: '#3B82F6', marginBottom: 8 },
+      contactRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
+      contactItem: { fontSize: 9, color: '#666' },
+      section: { marginBottom: 16 },
+      sectionTitle: { fontSize: 12, fontWeight: 'bold', color: '#3B82F6', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 },
+      summaryText: { fontSize: 10, lineHeight: 1.6, color: '#333', marginBottom: 16 },
+      entryHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 },
+      entryTitle: { fontSize: 11, fontWeight: 'bold', color: '#1a1a2e' },
+      entryCompany: { fontSize: 10, color: '#3B82F6' },
+      entryDate: { fontSize: 9, color: '#888' },
+      entryDesc: { fontSize: 9.5, color: '#444', lineHeight: 1.5, marginTop: 3, marginBottom: 10 },
+      skillsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
+      skill: { fontSize: 9, backgroundColor: '#EEF2FF', color: '#3B82F6', padding: '3 8', borderRadius: 3 },
+      langRow: { flexDirection: 'row', gap: 16, marginTop: 4 },
+      langItem: { fontSize: 10, color: '#333' },
+    });
+    const labels = { nl: { profile: 'Profiel', experience: 'Werkervaring', education: 'Opleiding', skills: 'Vaardigheden', languages: 'Talen' }, fr: { profile: 'Profil', experience: 'Experience', education: 'Formation', skills: 'Competences', languages: 'Langues' }, en: { profile: 'Profile', experience: 'Work Experience', education: 'Education', skills: 'Skills', languages: 'Languages' } };
+    const lb = labels[taal] || labels.nl;
+    const CVDoc = () => (
+      <Document>
+        <Page size="A4" style={s.page}>
+          <View style={s.header}>
+            <Text style={s.name}>{naam}</Text>
+            <Text style={s.role}>{gewensteFunctie}</Text>
+            <View style={s.contactRow}>
+              {email && <Text style={s.contactItem}>{email}</Text>}
+              {telefoon && <Text style={s.contactItem}>{telefoon}</Text>}
+              {adres && <Text style={s.contactItem}>{adres}</Text>}
+              {linkedin && <Text style={s.contactItem}>{linkedin}</Text>}
+            </View>
+          </View>
+          {summary && <View style={s.section}><Text style={s.sectionTitle}>{lb.profile}</Text><Text style={s.summaryText}>{summary}</Text></View>}
+          <View style={s.section}>
+            <Text style={s.sectionTitle}>{lb.experience}</Text>
+            {ervaring.filter(e => e.functie).map((e, i) => (
+              <View key={i}><View style={s.entryHeader}><View><Text style={s.entryTitle}>{e.functie}</Text><Text style={s.entryCompany}>{e.bedrijf}</Text></View><Text style={s.entryDate}>{e.van} - {e.tot || 'Heden'}</Text></View>{e.beschrijving && <Text style={s.entryDesc}>{e.beschrijving}</Text>}</View>
+            ))}
+          </View>
+          <View style={s.section}>
+            <Text style={s.sectionTitle}>{lb.education}</Text>
+            {opleiding.filter(o => o.diploma).map((o, i) => (
+              <View key={i} style={{ marginBottom: 8 }}><View style={s.entryHeader}><View><Text style={s.entryTitle}>{o.diploma}</Text><Text style={s.entryCompany}>{o.school}</Text></View><Text style={s.entryDate}>{o.jaar}</Text></View></View>
+            ))}
+          </View>
+          {vaardigheden && <View style={s.section}><Text style={s.sectionTitle}>{lb.skills}</Text><View style={s.skillsRow}>{vaardigheden.split(',').map((sk, i) => <Text key={i} style={s.skill}>{sk.trim()}</Text>)}</View></View>}
+          {talen && <View style={s.section}><Text style={s.sectionTitle}>{lb.languages}</Text><View style={s.langRow}>{talen.split(',').map((la, i) => <Text key={i} style={s.langItem}>{la.trim()}</Text>)}</View></View>}
+        </Page>
+      </Document>
+    );
+    const blob = await pdf(<CVDoc />).toBlob();
+    setPdfUrl(URL.createObjectURL(blob));
+  };
+
+  const downloadPDF = () => { if (!pdfUrl) return; const a = document.createElement('a'); a.href = pdfUrl; a.download = `CV_${naam.replace(/\s+/g, '_')}.pdf`; a.click(); };
+
+  const inp = "w-full px-3.5 py-2.5 bg-[#141B2D] border border-[#2A3550] rounded-lg text-[#D4DCE8] text-sm outline-none focus:border-[#3B82F6] transition-colors placeholder:text-[#3A4560]";
+  const ta = inp + " resize-y min-h-[100px]";
+  const lbl = "block text-xs font-semibold text-[#6B7A99] mb-1.5";
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0B0F1A', fontFamily: "'Outfit', sans-serif" }}>
-
-      {/* ===== NAV ===== */}
-      <nav style={{
-        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
-        padding: '12px 24px',
-        background: scrolled ? 'rgba(11,15,26,0.92)' : 'transparent',
-        backdropFilter: scrolled ? 'blur(16px)' : 'none',
-        borderBottom: scrolled ? '1px solid rgba(42,53,80,0.3)' : 'none',
-        transition: 'all 0.3s ease',
-      }}>
-        <div style={{ maxWidth: 1080, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Logo />
-          <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-            <a href="#features" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>{t.nav_features}</a>
-            <a href="#hoe-werkt-het" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>{t.nav_how}</a>
-            <a href="#pricing" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>{t.nav_pricing}</a>
-            <Link href="/over-ons" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>{t.nav_about}</Link>
-            <LanguageSwitcher />
-            <Link href="/brief" style={{
-              padding: '8px 20px', borderRadius: 8, fontSize: 13, fontWeight: 600,
-              background: 'linear-gradient(135deg, #3B82F6, #10B981)',
-              color: '#FFF', textDecoration: 'none', border: 'none',
-            }}>{t.nav_cta}</Link>
+    <div className="min-h-screen bg-[#0B0F1A]" style={{ fontFamily: "'Outfit', sans-serif" }}>
+      <header className="border-b border-[#2A355030] bg-[#141B2D80]" style={{ backdropFilter: 'blur(12px)' }}>
+        <div className="max-w-[600px] mx-auto px-5 pt-4 pb-3">
+          <div className="flex items-center gap-3">
+            <Link href="/" className="flex items-center gap-2.5 no-underline">
+              <div className="w-8 h-8 rounded-[9px] bg-gradient-to-br from-[#3B82F6] to-[#10B981] flex items-center justify-center text-sm font-bold text-white">C</div>
+              <span className="text-base font-bold text-[#F0F2F7]">Carrio</span>
+            </Link>
+            <div className="flex-1" />
+            <span className="text-[10px] px-2.5 py-1 bg-[#6366F118] text-[#818CF8] rounded-full font-semibold" style={{ fontFamily: "'JetBrains Mono', monospace" }}>CV BUILDER</span>
           </div>
-        </div>
-      </nav>
-
-      {/* ===== HERO ===== */}
-      <section style={{
-        padding: '140px 24px 80px', textAlign: 'center', position: 'relative', overflow: 'hidden',
-      }}>
-        <div style={{ position: 'absolute', top: '10%', left: '20%', width: 400, height: 400, background: 'radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', top: '20%', right: '15%', width: 350, height: 350, background: 'radial-gradient(circle, rgba(16,185,129,0.06) 0%, transparent 70%)', pointerEvents: 'none' }} />
-
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: 720, margin: '0 auto' }}>
-          <div className="animate-fade-up" style={{ opacity: 0 }}>
-            <span style={{
-              display: 'inline-block', padding: '6px 16px', borderRadius: 100,
-              fontSize: 11, fontWeight: 600, letterSpacing: 1.5,
-              background: 'rgba(59,130,246,0.1)', color: '#60A5FA',
-              border: '1px solid rgba(59,130,246,0.2)', marginBottom: 24,
-              fontFamily: "'JetBrains Mono', monospace",
-            }}>{t.hero_badge}</span>
-          </div>
-
-          <h1 className="animate-fade-up delay-100" style={{
-            fontSize: 'clamp(36px, 6vw, 64px)', fontWeight: 800, lineHeight: 1.1,
-            color: '#F0F2F7', margin: '0 0 20px', opacity: 0,
-          }}>
-            {t.hero_title_1}<br />
-            <span className="gradient-text">{t.hero_title_2}</span>
-          </h1>
-
-          <p className="animate-fade-up delay-200" style={{
-            fontSize: 'clamp(16px, 2vw, 19px)', color: '#94A3C0', maxWidth: 540,
-            margin: '0 auto 32px', lineHeight: 1.7, opacity: 0,
-          }}>
-            {t.hero_subtitle}
-          </p>
-
-          <div className="animate-fade-up delay-300" style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', opacity: 0 }}>
-            <Link href="/brief" style={{
-              padding: '14px 32px', borderRadius: 10, fontSize: 15, fontWeight: 700,
-              background: 'linear-gradient(135deg, #3B82F6, #10B981)',
-              color: '#FFF', textDecoration: 'none', display: 'inline-block',
-              boxShadow: '0 4px 24px rgba(59,130,246,0.3)',
-            }}>{t.hero_cta}</Link>
-            <a href="#hoe-werkt-het" style={{
-              padding: '14px 28px', borderRadius: 10, fontSize: 15, fontWeight: 600,
-              background: 'transparent', color: '#94A3C0', textDecoration: 'none',
-              border: '1px solid #2A3550', display: 'inline-block',
-            }}>{t.hero_cta2}</a>
-          </div>
-
-          <div className="animate-fade-up delay-400" style={{
-            display: 'flex', gap: 32, justifyContent: 'center', marginTop: 48, opacity: 0,
-          }}>
-            {[
-              { num: t.hero_stat1_num, label: t.hero_stat1_label },
-              { num: t.hero_stat2_num, label: t.hero_stat2_label },
-              { num: t.hero_stat3_num, label: t.hero_stat3_label },
-            ].map((s, i) => (
-              <div key={i} style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 24, fontWeight: 800, color: '#F0F2F7' }}>{s.num}</div>
-                <div style={{ fontSize: 11, color: '#6B7A99', fontWeight: 500, marginTop: 2 }}>{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== FEATURES ===== */}
-      <section id="features" style={{ padding: '60px 24px 80px' }}>
-        <div style={{ maxWidth: 960, margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
-            <span style={{
-              fontSize: 10, letterSpacing: 3, color: '#3B82F6', fontWeight: 600,
-              fontFamily: "'JetBrains Mono', monospace",
-            }}>{t.features_label}</span>
-            <h2 style={{ fontSize: 32, fontWeight: 800, color: '#F0F2F7', margin: '8px 0 0' }}>
-              {t.features_title}
-            </h2>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
-            {features.map((f, i) => (
-              <div key={i} style={{
-                background: '#141B2D', borderRadius: 14, padding: 24,
-                border: '1px solid rgba(42,53,80,0.4)',
-                transition: 'border-color 0.3s, transform 0.3s',
-              }}>
-                <div style={{ fontSize: 32, marginBottom: 12 }}>{f.emoji}</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-                  <h3 style={{ fontSize: 17, fontWeight: 700, color: '#F0F2F7', margin: 0 }}>{f.title}</h3>
-                  <span style={{
-                    fontSize: 8, fontWeight: 700, letterSpacing: 1,
-                    padding: '3px 8px', borderRadius: 4,
-                    background: `${f.tagColor}18`, color: f.tagColor,
-                    fontFamily: "'JetBrains Mono', monospace",
-                  }}>{f.tag}</span>
-                </div>
-                <p style={{ fontSize: 13, color: '#94A3C0', lineHeight: 1.7, margin: 0 }}>{f.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== HOE WERKT HET ===== */}
-      <section id="hoe-werkt-het" style={{
-        padding: '80px 24px',
-        background: 'linear-gradient(180deg, rgba(20,27,45,0.5) 0%, #0B0F1A 100%)',
-      }}>
-        <div style={{ maxWidth: 720, margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
-            <span style={{
-              fontSize: 10, letterSpacing: 3, color: '#10B981', fontWeight: 600,
-              fontFamily: "'JetBrains Mono', monospace",
-            }}>{t.how_label}</span>
-            <h2 style={{ fontSize: 32, fontWeight: 800, color: '#F0F2F7', margin: '8px 0 0' }}>
-              {t.how_title}
-            </h2>
-          </div>
-
-          <div style={{ position: 'relative', paddingLeft: 48 }}>
-            <div style={{
-              position: 'absolute', left: 18, top: 8, bottom: 8, width: 2,
-              background: 'linear-gradient(180deg, #3B82F6, #6366F1, #10B981)',
-              borderRadius: 1,
-            }} />
-
-            {steps.map((step, i) => (
-              <div key={i} style={{ position: 'relative', marginBottom: i < 3 ? 36 : 0 }}>
-                <div style={{
-                  position: 'absolute', left: -38, top: 2,
-                  width: 28, height: 28, borderRadius: '50%',
-                  background: i === 3 ? 'linear-gradient(135deg, #3B82F6, #10B981)' : '#1C2438',
-                  border: i === 3 ? 'none' : '2px solid #3B82F6',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 12, fontWeight: 700,
-                  color: i === 3 ? '#FFF' : '#3B82F6',
-                }}>{step.num}</div>
-
-                <h3 style={{ fontSize: 17, fontWeight: 700, color: '#F0F2F7', margin: '0 0 4px' }}>{step.title}</h3>
-                <p style={{ fontSize: 14, color: '#94A3C0', lineHeight: 1.6, margin: 0 }}>{step.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          <div style={{ textAlign: 'center', marginTop: 48 }}>
-            <Link href="/brief" style={{
-              padding: '14px 32px', borderRadius: 10, fontSize: 15, fontWeight: 700,
-              background: 'linear-gradient(135deg, #3B82F6, #10B981)',
-              color: '#FFF', textDecoration: 'none', display: 'inline-block',
-            }}>{t.how_cta}</Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== PRICING ===== */}
-      <section id="pricing" style={{ padding: '80px 24px' }}>
-        <div style={{ maxWidth: 820, margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
-            <span style={{
-              fontSize: 10, letterSpacing: 3, color: '#F59E0B', fontWeight: 600,
-              fontFamily: "'JetBrains Mono', monospace",
-            }}>{t.pricing_label}</span>
-            <h2 style={{ fontSize: 32, fontWeight: 800, color: '#F0F2F7', margin: '8px 0 0' }}>
-              {t.pricing_title}
-            </h2>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16 }}>
-            {/* Free */}
-            <div style={{
-              background: '#141B2D', borderRadius: 16, padding: 28,
-              border: '1px solid rgba(42,53,80,0.4)',
-            }}>
-              <div style={{ fontSize: 12, fontWeight: 600, color: '#6B7A99', marginBottom: 4 }}>{t.free_label}</div>
-              <div style={{ fontSize: 36, fontWeight: 800, color: '#F0F2F7' }}>{t.free_price}</div>
-              <div style={{ fontSize: 13, color: '#6B7A99', marginBottom: 20 }}>{t.free_period}</div>
-              {[t.free_f1, t.free_f2, t.free_f3].map((f, i) => (
-                <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 10, fontSize: 13, color: '#D4DCE8' }}>
-                  <span style={{ color: '#10B981' }}>✓</span>{f}
-                </div>
+          {emailConfirmed && step < 4 && (
+            <div className="flex gap-1.5 mt-3">
+              {[0, 1, 2, 3].map((i) => (
+                <div key={i} className="flex-1 h-[3px] rounded-full transition-colors" style={{ background: i <= step ? 'linear-gradient(90deg, #6366F1, #10B981)' : '#1C2438' }} />
               ))}
-              <Link href="/brief" style={{
-                display: 'block', textAlign: 'center', marginTop: 20,
-                padding: '12px', borderRadius: 10, fontSize: 14, fontWeight: 600,
-                border: '1px solid #2A3550', color: '#94A3C0', textDecoration: 'none',
-              }}>{t.free_cta}</Link>
             </div>
+          )}
+        </div>
+      </header>
 
-            {/* Starter */}
-            <div style={{
-              background: '#141B2D', borderRadius: 16, padding: 28,
-              border: '1px solid rgba(42,53,80,0.4)',
-            }}>
-              <div style={{ fontSize: 12, fontWeight: 600, color: '#10B981', marginBottom: 4 }}>{t.starter_label}</div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-                <span style={{ fontSize: 36, fontWeight: 800, color: '#F0F2F7' }}>{t.starter_price}</span>
+      <main className="max-w-[600px] mx-auto px-5 py-5">
+        {!emailConfirmed && (
+          <div style={{ paddingTop: 40, textAlign: 'center' }}>
+            <div style={{ width: 56, height: 56, borderRadius: 16, margin: '0 auto 20px', background: 'linear-gradient(135deg, #6366F1, #10B981)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26 }}>📄</div>
+            <h2 className="text-2xl font-bold text-[#F0F2F7] mb-2">{lang === 'fr' ? 'Creez votre CV professionnel' : 'Bouw je professionele CV'}</h2>
+            <p className="text-sm text-[#6B7A99] mb-6 max-w-[360px] mx-auto leading-relaxed">{lang === 'fr' ? 'Entrez votre email pour commencer.' : 'Vul je emailadres in om te starten. Je eerste CV is gratis!'}</p>
+            <div className="max-w-[360px] mx-auto">
+              <input type="email" className={inp + " !text-center !text-base !py-3.5 mb-3"} placeholder="jouw@email.be" value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleEmailSubmit()} />
+              <button onClick={handleEmailSubmit} disabled={!email.includes('@') || !email.includes('.')} className="w-full py-3.5 rounded-lg text-base font-semibold transition-all cursor-pointer" style={{ background: email.includes('@') && email.includes('.') ? 'linear-gradient(135deg, #6366F1, #10B981)' : '#1C2438', color: email.includes('@') && email.includes('.') ? '#FFF' : '#4A5568', border: 'none' }}>Start →</button>
+            </div>
+          </div>
+        )}
+
+        {emailConfirmed && (
+          <>
+            {step === 0 && (
+              <div>
+                <h2 className="text-xl font-bold text-[#F0F2F7] mb-1">{lang === 'fr' ? 'Informations personnelles' : 'Persoonlijke gegevens'}</h2>
+                <p className="text-sm text-[#6B7A99] mb-5">{lang === 'fr' ? 'Ces informations apparaitront en haut de votre CV.' : 'Deze gegevens komen bovenaan je CV.'}</p>
+                <div className="mb-4"><label className={lbl}>{lang === 'fr' ? 'Nom complet' : 'Volledige naam'} *</label><input className={inp} placeholder="Jan Peeters" value={naam} onChange={(e) => setNaam(e.target.value)} /></div>
+                <div className="mb-4"><label className={lbl}>{lang === 'fr' ? 'Fonction souhaitee' : 'Gewenste functie'} *</label><input className={inp} placeholder="Marketing Manager" value={gewensteFunctie} onChange={(e) => setGewensteFunctie(e.target.value)} /></div>
+                <div className="mb-4"><label className={lbl}>{lang === 'fr' ? 'Telephone' : 'Telefoon'}</label><input className={inp} placeholder="+32 470 12 34 56" value={telefoon} onChange={(e) => setTelefoon(e.target.value)} /></div>
+                <div className="mb-4"><label className={lbl}>{lang === 'fr' ? 'Adresse' : 'Adres'}</label><input className={inp} placeholder="Antwerpen, Belgie" value={adres} onChange={(e) => setAdres(e.target.value)} /></div>
+                <div className="mb-4"><label className={lbl}>LinkedIn</label><input className={inp} placeholder="linkedin.com/in/janpeeters" value={linkedin} onChange={(e) => setLinkedin(e.target.value)} /></div>
+                <div className="flex justify-end mt-6">
+                  <button onClick={s0ok ? next : undefined} className={`px-7 py-3 rounded-lg text-sm font-semibold transition-colors ${s0ok ? 'bg-[#6366F1] text-white cursor-pointer hover:bg-[#4F46E5]' : 'bg-[#1C2438] text-[#4A5568] cursor-default'}`}>{lang === 'fr' ? 'Suivant' : 'Volgende'} →</button>
+                </div>
               </div>
-              <div style={{ fontSize: 13, color: '#6B7A99', marginBottom: 20 }}>{t.starter_period}</div>
-              {[t.starter_f1, t.starter_f2, t.starter_f3, t.starter_f4].map((f, i) => (
-                <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 10, fontSize: 13, color: '#D4DCE8' }}>
-                  <span style={{ color: '#10B981' }}>✓</span>{f}
-                </div>
-              ))}
-              <Link href="/brief" style={{
-                display: 'block', textAlign: 'center', marginTop: 20,
-                padding: '12px', borderRadius: 10, fontSize: 14, fontWeight: 600,
-                border: '1px solid #2A3550', color: '#94A3C0', textDecoration: 'none',
-              }}>{t.starter_cta}</Link>
-            </div>
+            )}
 
-            {/* Pro */}
-            <div style={{
-              background: '#141B2D', borderRadius: 16, padding: 28,
-              border: '2px solid #3B82F6', position: 'relative',
-            }}>
-              <span style={{
-                position: 'absolute', top: -10, right: 16,
-                padding: '4px 12px', borderRadius: 6, fontSize: 10, fontWeight: 700,
-                background: 'linear-gradient(135deg, #3B82F6, #10B981)', color: '#FFF',
-                letterSpacing: 1, fontFamily: "'JetBrains Mono', monospace",
-              }}>{t.pro_badge}</span>
-              <div style={{ fontSize: 12, fontWeight: 600, color: '#3B82F6', marginBottom: 4 }}>{t.pro_label}</div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-                <span style={{ fontSize: 36, fontWeight: 800, color: '#F0F2F7' }}>{t.pro_price}</span>
-                <span style={{ fontSize: 14, color: '#6B7A99' }}>{t.pro_period_suffix}</span>
+            {step === 1 && (
+              <div>
+                <h2 className="text-xl font-bold text-[#F0F2F7] mb-1">{lang === 'fr' ? 'Experience professionnelle' : 'Werkervaring'}</h2>
+                <p className="text-sm text-[#6B7A99] mb-5">{lang === 'fr' ? 'Ajoutez vos experiences.' : 'Voeg je ervaringen toe, van recent naar oud.'}</p>
+                {ervaring.map((e, i) => (
+                  <div key={i} className="bg-[#141B2D] rounded-xl p-4 border border-[#2A355040] mb-4">
+                    <div className="flex justify-between items-center mb-3">
+                      <span className="text-xs font-semibold text-[#6366F1]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{lang === 'fr' ? 'EXPERIENCE' : 'ERVARING'} {i + 1}</span>
+                      {ervaring.length > 1 && <button onClick={() => removeErvaring(i)} className="text-xs text-[#6B7A99] cursor-pointer bg-transparent border-none">✕</button>}
+                    </div>
+                    <div className="mb-3"><label className={lbl}>{lang === 'fr' ? 'Fonction' : 'Functie'} *</label><input className={inp} placeholder="Marketing Manager" value={e.functie} onChange={(ev) => updateErvaring(i, 'functie', ev.target.value)} /></div>
+                    <div className="mb-3"><label className={lbl}>{lang === 'fr' ? 'Entreprise' : 'Bedrijf'} *</label><input className={inp} placeholder="Coolblue" value={e.bedrijf} onChange={(ev) => updateErvaring(i, 'bedrijf', ev.target.value)} /></div>
+                    <div className="grid grid-cols-2 gap-3 mb-3">
+                      <div><label className={lbl}>{lang === 'fr' ? 'De' : 'Van'}</label><input className={inp} placeholder="2020" value={e.van} onChange={(ev) => updateErvaring(i, 'van', ev.target.value)} /></div>
+                      <div><label className={lbl}>{lang === 'fr' ? 'A' : 'Tot'}</label><input className={inp} placeholder={lang === 'fr' ? 'Present' : 'Heden'} value={e.tot} onChange={(ev) => updateErvaring(i, 'tot', ev.target.value)} /></div>
+                    </div>
+                    <div><label className={lbl}>{lang === 'fr' ? 'Description' : 'Beschrijving'}</label><textarea className={ta} placeholder={lang === 'fr' ? 'Decrivez vos responsabilites...' : 'Beschrijf je taken en prestaties...'} value={e.beschrijving} onChange={(ev) => updateErvaring(i, 'beschrijving', ev.target.value)} /></div>
+                  </div>
+                ))}
+                <button onClick={addErvaring} className="w-full py-2.5 rounded-lg text-sm font-medium text-[#6366F1] border border-dashed border-[#6366F140] cursor-pointer bg-transparent mb-4">+ {lang === 'fr' ? 'Ajouter' : 'Toevoegen'}</button>
+                <div className="flex justify-between mt-4">
+                  <button onClick={back} className="px-7 py-3 rounded-lg text-sm font-medium text-[#6B7A99] border border-[#2A3550] cursor-pointer">← {lang === 'fr' ? 'Retour' : 'Terug'}</button>
+                  <button onClick={s1ok ? next : undefined} className={`px-7 py-3 rounded-lg text-sm font-semibold transition-colors ${s1ok ? 'bg-[#6366F1] text-white cursor-pointer' : 'bg-[#1C2438] text-[#4A5568] cursor-default'}`}>{lang === 'fr' ? 'Suivant' : 'Volgende'} →</button>
+                </div>
               </div>
-              <div style={{ fontSize: 13, color: '#6B7A99', marginBottom: 20 }}>{t.pro_period_desc}</div>
-              {[t.pro_f1, t.pro_f2, t.pro_f3, t.pro_f4].map((f, i) => (
-                <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 10, fontSize: 13, color: '#D4DCE8' }}>
-                  <span style={{ color: '#10B981' }}>✓</span>{f}
+            )}
+
+            {step === 2 && (
+              <div>
+                <h2 className="text-xl font-bold text-[#F0F2F7] mb-1">{lang === 'fr' ? 'Formation' : 'Opleiding'}</h2>
+                <p className="text-sm text-[#6B7A99] mb-5">{lang === 'fr' ? 'Ajoutez vos diplomes.' : 'Voeg je opleidingen toe.'}</p>
+                {opleiding.map((o, i) => (
+                  <div key={i} className="bg-[#141B2D] rounded-xl p-4 border border-[#2A355040] mb-4">
+                    <div className="flex justify-between items-center mb-3">
+                      <span className="text-xs font-semibold text-[#6366F1]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{lang === 'fr' ? 'FORMATION' : 'OPLEIDING'} {i + 1}</span>
+                      {opleiding.length > 1 && <button onClick={() => removeOpleiding(i)} className="text-xs text-[#6B7A99] cursor-pointer bg-transparent border-none">✕</button>}
+                    </div>
+                    <div className="mb-3"><label className={lbl}>{lang === 'fr' ? 'Diplome' : 'Diploma'} *</label><input className={inp} placeholder="Bachelor Bedrijfsmanagement" value={o.diploma} onChange={(ev) => updateOpleiding(i, 'diploma', ev.target.value)} /></div>
+                    <div className="mb-3"><label className={lbl}>{lang === 'fr' ? 'Ecole' : 'School'} *</label><input className={inp} placeholder="KU Leuven" value={o.school} onChange={(ev) => updateOpleiding(i, 'school', ev.target.value)} /></div>
+                    <div><label className={lbl}>{lang === 'fr' ? 'Annee' : 'Jaar'}</label><input className={inp} placeholder="2018" value={o.jaar} onChange={(ev) => updateOpleiding(i, 'jaar', ev.target.value)} /></div>
+                  </div>
+                ))}
+                <button onClick={addOpleiding} className="w-full py-2.5 rounded-lg text-sm font-medium text-[#6366F1] border border-dashed border-[#6366F140] cursor-pointer bg-transparent mb-4">+ {lang === 'fr' ? 'Ajouter' : 'Toevoegen'}</button>
+                <div className="flex justify-between mt-4">
+                  <button onClick={back} className="px-7 py-3 rounded-lg text-sm font-medium text-[#6B7A99] border border-[#2A3550] cursor-pointer">← {lang === 'fr' ? 'Retour' : 'Terug'}</button>
+                  <button onClick={s2ok ? next : undefined} className={`px-7 py-3 rounded-lg text-sm font-semibold transition-colors ${s2ok ? 'bg-[#6366F1] text-white cursor-pointer' : 'bg-[#1C2438] text-[#4A5568] cursor-default'}`}>{lang === 'fr' ? 'Suivant' : 'Volgende'} →</button>
                 </div>
-              ))}
-              <Link href="/brief" style={{
-                display: 'block', textAlign: 'center', marginTop: 20,
-                padding: '12px', borderRadius: 10, fontSize: 14, fontWeight: 700,
-                background: 'linear-gradient(135deg, #3B82F6, #10B981)',
-                color: '#FFF', textDecoration: 'none',
-              }}>{t.pro_cta}</Link>
+              </div>
+            )}
+
+            {step === 3 && (
+              <div>
+                <h2 className="text-xl font-bold text-[#F0F2F7] mb-1">{lang === 'fr' ? 'Competences & langues' : 'Vaardigheden & talen'}</h2>
+                <p className="text-sm text-[#6B7A99] mb-5">{lang === 'fr' ? 'Separez par des virgules.' : 'Scheid met kommas.'}</p>
+                <div className="mb-4"><label className={lbl}>{lang === 'fr' ? 'Competences' : 'Vaardigheden'}</label><textarea className={ta} placeholder="Excel, Photoshop, SEO, ..." value={vaardigheden} onChange={(e) => setVaardigheden(e.target.value)} /></div>
+                <div className="mb-6"><label className={lbl}>{lang === 'fr' ? 'Langues' : 'Talen'}</label><input className={inp} placeholder="Nederlands, Frans, Engels" value={talen} onChange={(e) => setTalen(e.target.value)} /></div>
+                <label className={lbl + " !mb-2.5"}>{lang === 'fr' ? 'Langue du CV' : 'Taal van het CV'}</label>
+                <div className="grid grid-cols-3 gap-2.5 mb-6">
+                  {[{ id: 'nl', label: 'Nederlands' }, { id: 'fr', label: 'Francais' }, { id: 'en', label: 'English' }].map((l) => (
+                    <button key={l.id} onClick={() => setTaal(l.id)} className="py-2.5 rounded-lg text-[13px] font-semibold transition-all cursor-pointer" style={{ background: taal === l.id ? '#6366F1' : '#141B2D', color: taal === l.id ? '#FFF' : '#6B7A99', border: `1px solid ${taal === l.id ? '#6366F1' : '#2A3550'}` }}>{l.label}</button>
+                  ))}
+                </div>
+                <div className="bg-[#0D1220] rounded-[10px] p-4 border border-[#2A355040] mb-6">
+                  <div className="text-xs font-semibold text-[#6366F1] mb-1.5" style={{ fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}>SAMENVATTING</div>
+                  <div className="text-[13px] text-[#94A3C0] leading-relaxed"><strong className="text-[#F0F2F7]">{naam}</strong> — {gewensteFunctie}<br />{ervaring.filter(e => e.functie).length} ervaring(en) · {opleiding.filter(o => o.diploma).length} opleiding(en)</div>
+                </div>
+                <div className="flex justify-between">
+                  <button onClick={back} className="px-7 py-3 rounded-lg text-sm font-medium text-[#6B7A99] border border-[#2A3550] cursor-pointer">← {lang === 'fr' ? 'Retour' : 'Terug'}</button>
+                  <button onClick={canGenerate ? generateCV : () => setShowPaywall(true)} className="px-8 py-3 rounded-lg text-sm font-semibold text-white cursor-pointer" style={{ background: 'linear-gradient(135deg, #6366F1, #10B981)', border: 'none' }}>{canGenerate ? '✨ Genereer CV' : 'Upgrade'}</button>
+                </div>
+              </div>
+            )}
+
+            {step === 4 && (
+              <div>
+                {loading && (
+                  <div className="text-center py-16">
+                    <div className="w-12 h-12 border-[3px] border-[#1C2438] border-t-[#6366F1] rounded-full mx-auto mb-5" style={{ animation: 'spin 0.8s linear infinite' }} />
+                    <div className="text-base font-semibold text-[#F0F2F7] mb-1.5">{lang === 'fr' ? 'Votre CV est en cours...' : 'Je CV wordt gemaakt...'}</div>
+                    <div className="text-sm text-[#6B7A99]">AI schrijft je profiel en genereert de PDF</div>
+                  </div>
+                )}
+                {!loading && error && (
+                  <div>
+                    <div className="bg-[#1A0B0F] border border-[#3A1520] rounded-[10px] p-4 mb-4">
+                      <div className="text-sm font-semibold text-[#F87171] mb-1">Generatie mislukt</div>
+                      <div className="text-xs text-[#A07070]">{error}</div>
+                    </div>
+                    <div className="flex gap-2.5">
+                      <button onClick={() => { setStep(3); setError(''); }} className="px-7 py-3 rounded-lg text-sm font-medium text-[#6B7A99] border border-[#2A3550] cursor-pointer">← Terug</button>
+                      <button onClick={generateCV} className="px-7 py-3 rounded-lg text-sm font-semibold text-white bg-[#6366F1] cursor-pointer border-none">Opnieuw</button>
+                    </div>
+                  </div>
+                )}
+                {!loading && !error && pdfUrl && (
+                  <div>
+                    <h2 className="text-xl font-bold text-[#F0F2F7] mb-4">Je CV is klaar! ✨</h2>
+                    {generatedSummary && (
+                      <div className="bg-[#141B2D] rounded-[10px] p-4 border border-[#2A355040] mb-4">
+                        <div className="text-xs font-semibold text-[#6366F1] mb-2" style={{ fontFamily: "'JetBrains Mono', monospace" }}>AI PROFIEL</div>
+                        <div className="text-sm text-[#94A3C0] leading-relaxed">{generatedSummary}</div>
+                      </div>
+                    )}
+                    <div className="bg-white rounded-[10px] overflow-hidden mb-4" style={{ height: 400 }}>
+                      <iframe src={pdfUrl} width="100%" height="100%" style={{ border: 'none' }} />
+                    </div>
+                    <div className="flex gap-2.5">
+                      <button onClick={() => { setStep(3); setPdfUrl(''); }} className="px-6 py-3 rounded-lg text-sm font-medium text-[#6B7A99] border border-[#2A3550] cursor-pointer">← Aanpassen</button>
+                      <div className="flex-1" />
+                      <button onClick={downloadPDF} className="px-8 py-3 rounded-lg text-sm font-semibold text-white cursor-pointer" style={{ background: 'linear-gradient(135deg, #6366F1, #10B981)', border: 'none' }}>Download PDF</button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </>
+        )}
+      </main>
+
+      {showPaywall && (
+        <div onClick={() => setShowPaywall(false)} style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 440, borderRadius: 18, background: '#141B2D', border: '1px solid rgba(42,53,80,0.5)', overflow: 'hidden' }}>
+            <div style={{ padding: '28px 24px 0', textAlign: 'center' }}>
+              <h3 style={{ fontSize: 20, fontWeight: 800, color: '#F0F2F7', margin: '0 0 6px' }}>Upgrade naar Pro</h3>
+              <p style={{ fontSize: 13, color: '#6B7A99', margin: '0 0 24px' }}>Onbeperkte CVs en sollicitatiebrieven.</p>
+            </div>
+            <div style={{ padding: '0 20px 24px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <div onClick={() => handleCheckout('pro')} style={{ padding: '16px 18px', borderRadius: 12, cursor: 'pointer', border: '2px solid #6366F1', background: 'rgba(99,102,241,0.06)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div><div style={{ fontSize: 15, fontWeight: 700, color: '#F0F2F7' }}>Pro</div><div style={{ fontSize: 12, color: '#6B7A99' }}>Onbeperkt</div></div>
+                  <div style={{ fontSize: 22, fontWeight: 800, color: '#F0F2F7' }}>€9,99<span style={{ fontSize: 11, color: '#6B7A99' }}>/mo</span></div>
+                </div>
+              </div>
+              <div onClick={() => handleCheckout('starter')} style={{ padding: '16px 18px', borderRadius: 12, cursor: 'pointer', border: '1px solid rgba(42,53,80,0.5)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div><div style={{ fontSize: 15, fontWeight: 700, color: '#F0F2F7' }}>Starter</div><div style={{ fontSize: 12, color: '#6B7A99' }}>3 documenten</div></div>
+                  <div style={{ fontSize: 22, fontWeight: 800, color: '#F0F2F7' }}>€4,99</div>
+                </div>
+              </div>
+            </div>
+            <div style={{ padding: '14px 20px', borderTop: '1px solid rgba(42,53,80,0.3)', textAlign: 'center' }}>
+              <button onClick={() => setShowPaywall(false)} style={{ background: 'none', border: 'none', color: '#6B7A99', fontSize: 12, cursor: 'pointer' }}>Niet nu</button>
             </div>
           </div>
         </div>
-      </section>
-
-      {/* ===== FAQ ===== */}
-      <section style={{
-        padding: '80px 24px',
-        background: 'linear-gradient(180deg, rgba(20,27,45,0.3) 0%, #0B0F1A 100%)',
-      }}>
-        <div style={{ maxWidth: 640, margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: 40 }}>
-            <span style={{
-              fontSize: 10, letterSpacing: 3, color: '#6366F1', fontWeight: 600,
-              fontFamily: "'JetBrains Mono', monospace",
-            }}>{t.faq_label}</span>
-            <h2 style={{ fontSize: 28, fontWeight: 800, color: '#F0F2F7', margin: '8px 0 0' }}>
-              {t.faq_title}
-            </h2>
-          </div>
-
-          {faqs.map((faq, i) => (
-            <div key={i} style={{
-              marginBottom: 8, borderRadius: 12, overflow: 'hidden',
-              border: `1px solid ${openFaq === i ? 'rgba(59,130,246,0.3)' : 'rgba(42,53,80,0.3)'}`,
-              background: openFaq === i ? 'rgba(20,27,45,0.8)' : 'transparent',
-              transition: 'all 0.2s ease',
-            }}>
-              <button onClick={() => setOpenFaq(openFaq === i ? null : i)} style={{
-                width: '100%', padding: '16px 20px', border: 'none', cursor: 'pointer',
-                background: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                fontSize: 14, fontWeight: 600, color: '#F0F2F7', fontFamily: 'inherit', textAlign: 'left',
-              }}>
-                {faq.q}
-                <span style={{
-                  fontSize: 18, color: '#6B7A99', transition: 'transform 0.2s',
-                  transform: openFaq === i ? 'rotate(45deg)' : 'none',
-                }}>+</span>
-              </button>
-              {openFaq === i && (
-                <div style={{ padding: '0 20px 16px', fontSize: 13, color: '#94A3C0', lineHeight: 1.7 }}>
-                  {faq.a}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ===== FINAL CTA ===== */}
-      <section style={{ padding: '80px 24px', textAlign: 'center' }}>
-        <div style={{ maxWidth: 520, margin: '0 auto' }}>
-          <h2 style={{ fontSize: 32, fontWeight: 800, color: '#F0F2F7', margin: '0 0 12px' }}>
-            {t.cta_title}
-          </h2>
-          <p style={{ fontSize: 16, color: '#94A3C0', margin: '0 0 28px', lineHeight: 1.6 }}>
-            {t.cta_subtitle}
-          </p>
-          <Link href="/brief" style={{
-            padding: '16px 40px', borderRadius: 12, fontSize: 17, fontWeight: 700,
-            background: 'linear-gradient(135deg, #3B82F6, #10B981)',
-            color: '#FFF', textDecoration: 'none', display: 'inline-block',
-            boxShadow: '0 4px 32px rgba(59,130,246,0.3)',
-          }}>{t.cta_button}</Link>
-        </div>
-      </section>
-
-      {/* ===== FOOTER ===== */}
-      <footer style={{
-        padding: '32px 24px', borderTop: '1px solid rgba(42,53,80,0.3)',
-        textAlign: 'center',
-      }}>
-        <div style={{ maxWidth: 960, margin: '0 auto' }}>
-          <Logo />
-          <p style={{ fontSize: 12, color: '#6B7A99', marginTop: 12 }}>
-            {t.footer_copy}
-          </p>
-          <div style={{ display: 'flex', gap: 20, justifyContent: 'center', marginTop: 8 }}>
-            <a href="/over-ons" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>{t.footer_about}</a>
-            <a href="#" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>{t.footer_privacy}</a>
-            <a href="#" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>{t.footer_terms}</a>
-            <a href="mailto:hello@carrio.be" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>{t.footer_contact}</a>
-          </div>
-        </div>
-      </footer>
+      )}
     </div>
   );
 }
