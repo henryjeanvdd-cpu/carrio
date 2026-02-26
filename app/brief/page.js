@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect, Suspense } from 'react';
 import Link from 'next/link';
+import { useLanguage } from '@/lib/LanguageContext';
 
 const TONES = [
   { id: 'professioneel', label: 'Professioneel', desc: 'Zakelijk en formeel', emoji: '👔' },
@@ -16,6 +17,7 @@ const LANGS = [
 ];
 
 export default function BriefApp() {
+  const { lang } = useLanguage();
 
   // Auth / payment state
   const [email, setEmail] = useState('');
