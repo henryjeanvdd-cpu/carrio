@@ -90,7 +90,6 @@ export default function LandingPage() {
             <a href="#features" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>Features</a>
             <a href="#hoe-werkt-het" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>Hoe werkt het</a>
             <a href="#pricing" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>Pricing</a>
-                <Link href="/over-ons" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>Over Ons</Link>
             <Link href="/brief" style={{
               padding: '8px 20px', borderRadius: 8, fontSize: 13, fontWeight: 600,
               background: 'linear-gradient(135deg, #3B82F6, #10B981)',
@@ -330,7 +329,7 @@ export default function LandingPage() {
                 <span style={{ fontSize: 14, color: '#6B7A99' }}>/maand</span>
               </div>
               <div style={{ fontSize: 13, color: '#6B7A99', marginBottom: 20 }}>onbeperkt brieven</div>
-              {['Onbeperkt sollicitatiebrieven', 'Alle talen', 'Prioriteit support', 'Maandelijks opzegbaar'].map((f, i) => (
+              {['Onbeperkt sollicitatiebrieven', 'Alle talen', 'CV Builder (binnenkort)', 'Interview Prep (binnenkort)', 'Prioriteit support'].map((f, i) => (
                 <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 10, fontSize: 13, color: '#D4DCE8' }}>
                   <span style={{ color: '#10B981' }}>✓</span>{f}
                 </div>
@@ -419,7 +418,6 @@ export default function LandingPage() {
             © 2026 Carrio. Gemaakt in Antwerpen 🇧🇪
           </p>
           <div style={{ display: 'flex', gap: 20, justifyContent: 'center', marginTop: 8 }}>
-              <a href="/over-ons" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>Over ons</a>
             <a href="#" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>Privacy</a>
             <a href="#" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>Voorwaarden</a>
             <a href="mailto:hello@carrio.be" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>Contact</a>
