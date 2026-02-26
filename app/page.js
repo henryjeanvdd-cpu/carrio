@@ -59,7 +59,7 @@ export default function LandingPage() {
   const features = [
     { emoji: '✍️', title: t.feature1_title, desc: t.feature1_desc, tag: t.feature1_tag, tagColor: '#10B981' },
     { emoji: '📄', title: t.feature2_title, desc: t.feature2_desc, tag: t.feature2_tag, tagColor: '#10B981' },
-    { emoji: '🎤', title: t.feature3_title, desc: t.feature3_desc, tag: t.feature3_tag, tagColor: '#10B981' },
+    { emoji: '🎤', title: t.feature3_title, desc: t.feature3_desc, tag: t.feature3_tag, tagColor: '#6366F1' },
     { emoji: '💼', title: t.feature4_title, desc: t.feature4_desc, tag: t.feature4_tag, tagColor: '#F59E0B' },
   ];
 
@@ -99,6 +99,7 @@ export default function LandingPage() {
             <a href="#pricing" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>{t.nav_pricing}</a>
             <Link href="/over-ons" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>{t.nav_about}</Link>
             <Link href="/cv" style={{ fontSize: 13, color: '#818CF8', textDecoration: 'none', fontWeight: 600 }}>CV Builder</Link>
+            <Link href="/interview" style={{ fontSize: 13, color: '#F59E0B', textDecoration: 'none', fontWeight: 600 }}>Interview Prep</Link>
             <Link href="/interview" style={{ fontSize: 13, color: '#F59E0B', textDecoration: 'none', fontWeight: 600 }}>Interview Prep</Link>
             <LanguageSwitcher />
             <Link href="/brief" style={{
@@ -275,7 +276,7 @@ export default function LandingPage() {
             </h2>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16 }}>
             {/* Free */}
             <div style={{
               background: '#141B2D', borderRadius: 16, padding: 28,
@@ -284,7 +285,7 @@ export default function LandingPage() {
               <div style={{ fontSize: 12, fontWeight: 600, color: '#6B7A99', marginBottom: 4 }}>{t.free_label}</div>
               <div style={{ fontSize: 36, fontWeight: 800, color: '#F0F2F7' }}>{t.free_price}</div>
               <div style={{ fontSize: 13, color: '#6B7A99', marginBottom: 20 }}>{t.free_period}</div>
-              {[t.free_f1, t.free_f2, t.free_f3].map((f, i) => (
+              {[t.free_f1, t.free_f1b, t.free_f1c, t.free_f2, t.free_f3].map((f, i) => (
                 <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 10, fontSize: 13, color: '#D4DCE8' }}>
                   <span style={{ color: '#10B981' }}>✓</span>{f}
                 </div>
@@ -306,7 +307,7 @@ export default function LandingPage() {
                 <span style={{ fontSize: 36, fontWeight: 800, color: '#F0F2F7' }}>{t.starter_price}</span>
               </div>
               <div style={{ fontSize: 13, color: '#6B7A99', marginBottom: 20 }}>{t.starter_period}</div>
-              {[t.starter_f1, t.starter_f2, t.starter_f3, t.starter_f4].map((f, i) => (
+              {[t.starter_f1, t.starter_f1b, t.starter_f2, t.starter_f3, t.starter_f4, t.starter_f5].map((f, i) => (
                 <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 10, fontSize: 13, color: '#D4DCE8' }}>
                   <span style={{ color: '#10B981' }}>✓</span>{f}
                 </div>
@@ -335,7 +336,7 @@ export default function LandingPage() {
                 <span style={{ fontSize: 14, color: '#6B7A99' }}>{t.pro_period_suffix}</span>
               </div>
               <div style={{ fontSize: 13, color: '#6B7A99', marginBottom: 20 }}>{t.pro_period_desc}</div>
-              {[t.pro_f1, t.pro_f2, t.pro_f3, t.pro_f4].map((f, i) => (
+              {[t.pro_f1, t.pro_f1b, t.pro_f2, t.pro_f3, t.pro_f4, t.pro_f5].map((f, i) => (
                 <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 10, fontSize: 13, color: '#D4DCE8' }}>
                   <span style={{ color: '#10B981' }}>✓</span>{f}
                 </div>
@@ -347,34 +348,33 @@ export default function LandingPage() {
                 color: '#FFF', textDecoration: 'none',
               }}>{t.pro_cta}</Link>
             </div>
-
             {/* Pro+ */}
             <div style={{
-              background: "#141B2D", borderRadius: 16, padding: 28,
-              border: "2px solid #F59E0B", position: "relative",
+              background: '#141B2D', borderRadius: 16, padding: 28,
+              border: '2px solid #F59E0B', position: 'relative',
             }}>
               <span style={{
-                position: "absolute", top: -10, right: 16,
-                padding: "4px 12px", borderRadius: 6, fontSize: 10, fontWeight: 700,
-                background: "linear-gradient(135deg, #F59E0B, #EF4444)", color: "#FFF",
+                position: 'absolute', top: -10, right: 16,
+                padding: '4px 12px', borderRadius: 6, fontSize: 10, fontWeight: 700,
+                background: 'linear-gradient(135deg, #F59E0B, #EF4444)', color: '#FFF',
                 letterSpacing: 1, fontFamily: "'JetBrains Mono', monospace",
               }}>{t.proplus_badge}</span>
-              <div style={{ fontSize: 12, fontWeight: 600, color: "#F59E0B", marginBottom: 4 }}>{t.proplus_label}</div>
-              <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
-                <span style={{ fontSize: 36, fontWeight: 800, color: "#F0F2F7" }}>{t.proplus_price}</span>
-                <span style={{ fontSize: 14, color: "#6B7A99" }}>{t.proplus_period_suffix}</span>
+              <div style={{ fontSize: 12, fontWeight: 600, color: '#F59E0B', marginBottom: 4 }}>{t.proplus_label}</div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+                <span style={{ fontSize: 36, fontWeight: 800, color: '#F0F2F7' }}>{t.proplus_price}</span>
+                <span style={{ fontSize: 14, color: '#6B7A99' }}>{t.proplus_period_suffix}</span>
               </div>
-              <div style={{ fontSize: 13, color: "#6B7A99", marginBottom: 20 }}>{t.proplus_period_desc}</div>
+              <div style={{ fontSize: 13, color: '#6B7A99', marginBottom: 20 }}>{t.proplus_period_desc}</div>
               {[t.proplus_f1, t.proplus_f2, t.proplus_f3, t.proplus_f4, t.proplus_f5, t.proplus_f6].map((f, i) => (
-                <div key={i} style={{ display: "flex", gap: 8, marginBottom: 10, fontSize: 13, color: "#D4DCE8" }}>
-                  <span style={{ color: "#10B981" }}>✓</span>{f}
+                <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 10, fontSize: 13, color: '#D4DCE8' }}>
+                  <span style={{ color: '#10B981' }}>{"✓"}</span>{f}
                 </div>
               ))}
               <Link href="/interview" style={{
-                display: "block", textAlign: "center", marginTop: 20,
-                padding: "12px", borderRadius: 10, fontSize: 14, fontWeight: 700,
-                background: "linear-gradient(135deg, #F59E0B, #EF4444)",
-                color: "#FFF", textDecoration: "none",
+                display: 'block', textAlign: 'center', marginTop: 20,
+                padding: '12px', borderRadius: 10, fontSize: 14, fontWeight: 700,
+                background: 'linear-gradient(135deg, #F59E0B, #EF4444)',
+                color: '#FFF', textDecoration: 'none',
               }}>{t.proplus_cta}</Link>
             </div>
           </div>
