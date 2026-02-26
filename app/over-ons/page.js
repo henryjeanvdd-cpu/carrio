@@ -1,11 +1,11 @@
-import Link from 'next/link';
+'use client';
 
-export const metadata = {
-  title: 'Over Ons – Carrio | AI Sollicitatiebrief Generator',
-  description: 'Leer meer over Carrio, de AI-tool voor sollicitatiebrieven en motivatiebrieven op maat van de Belgische arbeidsmarkt.',
-};
+import Link from 'next/link';
+import { useLanguage } from '../../lib/LanguageContext';
 
 export default function OverOns() {
+  const { t } = useLanguage();
+
   return (
     <div style={{ minHeight: '100vh', background: '#0a0b14', color: '#F0F2F7' }}>
 
@@ -20,7 +20,7 @@ export default function OverOns() {
             padding: '10px 24px', borderRadius: 10, fontSize: 14, fontWeight: 600,
             background: 'linear-gradient(135deg, #3B82F6, #10B981)',
             color: '#FFF', textDecoration: 'none',
-          }}>Start nu</Link>
+          }}>{t.about_nav_cta}</Link>
         </div>
       </header>
 
@@ -28,10 +28,10 @@ export default function OverOns() {
       <section style={{ padding: '80px 24px 40px', textAlign: 'center' }}>
         <div style={{ maxWidth: 680, margin: '0 auto' }}>
           <h1 style={{ fontSize: 36, fontWeight: 800, margin: '0 0 16px', lineHeight: 1.2 }}>
-            Over Carrio
+            {t.about_title}
           </h1>
           <p style={{ fontSize: 18, color: '#94A3C0', lineHeight: 1.7, margin: 0 }}>
-            Carrio helpt Belgische werkzoekenden bij het schrijven van professionele sollicitatiebrieven en motivatiebrieven met behulp van AI.
+            {t.about_subtitle}
           </p>
         </div>
       </section>
@@ -40,12 +40,12 @@ export default function OverOns() {
       <section style={{ padding: '40px 24px' }}>
         <div style={{ maxWidth: 680, margin: '0 auto' }}>
           <div style={{ background: 'rgba(20,22,40,0.8)', border: '1px solid rgba(42,53,80,0.5)', borderRadius: 16, padding: '40px 32px' }}>
-            <h2 style={{ fontSize: 24, fontWeight: 700, margin: '0 0 16px', color: '#F0F2F7' }}>Onze missie</h2>
+            <h2 style={{ fontSize: 24, fontWeight: 700, margin: '0 0 16px', color: '#F0F2F7' }}>{t.about_mission_title}</h2>
             <p style={{ fontSize: 15, color: '#94A3C0', lineHeight: 1.8, margin: '0 0 16px' }}>
-              Solliciteren in België is uniek. Of je nu in het Nederlands, Frans of Engels schrijft — elke regio heeft zijn eigen verwachtingen en conventies. Veel AI-tools begrijpen dat verschil niet.
+              {t.about_mission_p1}
             </p>
             <p style={{ fontSize: 15, color: '#94A3C0', lineHeight: 1.8, margin: 0 }}>
-              Carrio is gebouwd specifiek voor de Belgische arbeidsmarkt. We combineren AI-technologie met kennis van lokale sollicitatiecultuur, zodat jij in minder dan 30 seconden een brief op maat hebt die écht werkt.
+              {t.about_mission_p2}
             </p>
           </div>
         </div>
@@ -54,13 +54,13 @@ export default function OverOns() {
       {/* WAAROM CARRIO */}
       <section style={{ padding: '40px 24px' }}>
         <div style={{ maxWidth: 680, margin: '0 auto' }}>
-          <h2 style={{ fontSize: 24, fontWeight: 700, margin: '0 0 24px', textAlign: 'center', color: '#F0F2F7' }}>Waarom Carrio?</h2>
+          <h2 style={{ fontSize: 24, fontWeight: 700, margin: '0 0 24px', textAlign: 'center', color: '#F0F2F7' }}>{t.about_why_title}</h2>
           <div style={{ display: 'grid', gap: 16 }}>
             {[
-              { icon: '🇧🇪', title: 'Belgisch', desc: 'Specifiek ontwikkeld voor de Vlaamse, Waalse en Brusselse arbeidsmarkt.' },
-              { icon: '⚡', title: 'Snel', desc: 'Een professionele brief in minder dan 30 seconden. Geen account nodig.' },
-              { icon: '🎯', title: 'Op maat', desc: 'Elke brief wordt gegenereerd op basis van jouw profiel en de vacature.' },
-              { icon: '🔒', title: 'Privacy', desc: 'We bewaren je gegevens alleen om je brieven te tellen. Geen spam, nooit.' },
+              { icon: '🇧🇪', title: t.about_why1_title, desc: t.about_why1_desc },
+              { icon: '⚡', title: t.about_why2_title, desc: t.about_why2_desc },
+              { icon: '🎯', title: t.about_why3_title, desc: t.about_why3_desc },
+              { icon: '🔒', title: t.about_why4_title, desc: t.about_why4_desc },
             ].map((item, i) => (
               <div key={i} style={{
                 background: 'rgba(20,22,40,0.8)', border: '1px solid rgba(42,53,80,0.5)',
@@ -85,9 +85,9 @@ export default function OverOns() {
             background: 'rgba(20,22,40,0.8)', border: '1px solid rgba(42,53,80,0.5)',
             borderRadius: 16, padding: '40px 32px', textAlign: 'center',
           }}>
-            <h2 style={{ fontSize: 24, fontWeight: 700, margin: '0 0 12px', color: '#F0F2F7' }}>Contact</h2>
+            <h2 style={{ fontSize: 24, fontWeight: 700, margin: '0 0 12px', color: '#F0F2F7' }}>{t.about_contact_title}</h2>
             <p style={{ fontSize: 15, color: '#94A3C0', lineHeight: 1.8, margin: '0 0 20px' }}>
-              Heb je vragen, feedback of een samenwerking in gedachten? We horen graag van je.
+              {t.about_contact_desc}
             </p>
             <a href="mailto:hello@carrio.be" style={{
               display: 'inline-block',
@@ -112,12 +112,12 @@ export default function OverOns() {
       }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <p style={{ fontSize: 12, color: '#6B7A99', marginTop: 12 }}>
-            © 2026 Carrio. Gemaakt in Antwerpen 🇧🇪
+            {t.footer_copy}
           </p>
           <div style={{ display: 'flex', gap: 20, justifyContent: 'center', marginTop: 8 }}>
-            <Link href="/" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>Home</Link>
-            <Link href="/brief" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>Brief schrijven</Link>
-            <a href="mailto:hello@carrio.be" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>Contact</a>
+            <Link href="/" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>{t.about_footer_home}</Link>
+            <Link href="/brief" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>{t.about_footer_brief}</Link>
+            <a href="mailto:hello@carrio.be" style={{ fontSize: 11, color: '#6B7A99', textDecoration: 'none' }}>{t.footer_contact}</a>
           </div>
         </div>
       </footer>
