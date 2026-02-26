@@ -58,7 +58,7 @@ export default function LandingPage() {
 
   const features = [
     { emoji: '✍️', title: t.feature1_title, desc: t.feature1_desc, tag: t.feature1_tag, tagColor: '#10B981' },
-    { emoji: '📄', title: t.feature2_title, desc: t.feature2_desc, tag: t.feature2_tag, tagColor: '#6366F1' },
+    { emoji: '📄', title: t.feature2_title, desc: t.feature2_desc, tag: t.feature2_tag, tagColor: '#10B981' },
     { emoji: '🎤', title: t.feature3_title, desc: t.feature3_desc, tag: t.feature3_tag, tagColor: '#6366F1' },
     { emoji: '💼', title: t.feature4_title, desc: t.feature4_desc, tag: t.feature4_tag, tagColor: '#F59E0B' },
   ];
@@ -98,6 +98,7 @@ export default function LandingPage() {
             <a href="#hoe-werkt-het" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>{t.nav_how}</a>
             <a href="#pricing" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>{t.nav_pricing}</a>
             <Link href="/over-ons" style={{ fontSize: 13, color: '#94A3C0', textDecoration: 'none', fontWeight: 500 }}>{t.nav_about}</Link>
+            <Link href="/cv" style={{ fontSize: 13, color: '#818CF8', textDecoration: 'none', fontWeight: 600 }}>CV Builder</Link>
             <LanguageSwitcher />
             <Link href="/brief" style={{
               padding: '8px 20px', borderRadius: 8, fontSize: 13, fontWeight: 600,
